@@ -23,7 +23,7 @@ authors:
 repository-code: "https://github.com/WRI-Science/wri-public"
 url: "https://wildfireindex.org"
 abstract: >
-  Code used to generate the 2024 snapshot of the Western Wildfire Resilience Index (WRI),
+  Code used to generate the 2024 snapshot of the Wildfire Resilience Index (WRI),
   measuring wildfire resilience across communities in the western United States and Canada.
 keywords:
   - wildfire

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal #### 
 # The goal of this script is to generate a merged dataframe from the csvs made in step 2.
 # This was crashing python and was possible using data.table syntax in R.
@@ -9,9 +11,9 @@ library(tidyverse)
 library(data.table)
 
 #### File paths and Setup ####
-scanfi_dfs_path <- "/home/shares/wwri-wildfire/data/natural_habitats/int/scanfi/individual_csvs_to_join/"
+scanfi_dfs_path <- file.path(wri_project_root, "data", "natural_habitats", "int", "scanfi", "individual_csvs_to_join")
 closure_df_path <- paste0(scanfi_dfs_path, "closure.csv")
-save_path <- "/home/shares/wwri-wildfire/data/natural_habitats/int/scanfi/scanfi_merged_closure_all_species.csv"
+save_path <- file.path(wri_project_root, "data", "natural_habitats", "int", "scanfi", "scanfi_merged_closure_all_species.csv")
 
 # list of csvs to join
 csvs <- list(

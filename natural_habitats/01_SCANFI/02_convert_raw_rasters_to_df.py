@@ -1,3 +1,7 @@
+import os
+
+WRI_PROJECT_ROOT = os.environ.get("WRI_PROJECT_ROOT", "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to convert the biomass, closure, and species rasters 
 # into individual dataframes for easier processing of species counts, density, and trait matrix prep.
@@ -21,9 +25,9 @@ from affine import Affine
 
 #### File Paths and Setup ####
 # Base path for the raster files
-scanfi_raw_path = "/home/shares/wwri-wildfire/data/natural_habitats/raw/scanfi/"
-output_path = "/home/shares/wwri-wildfire/data/natural_habitats/int/scanfi/individual_csvs_to_join/"
-study_area_shape_path = "/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp"
+scanfi_raw_path = os.path.join(WRI_PROJECT_ROOT, "data", "natural_habitats", "raw", "scanfi")
+output_path = os.path.join(WRI_PROJECT_ROOT, "data", "natural_habitats", "int", "scanfi", "individual_csvs_to_join")
+study_area_shape_path = os.path.join(WRI_PROJECT_ROOT, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_0.shp")
 
 # List of raster file names and their corresponding column names
 raster_files = {

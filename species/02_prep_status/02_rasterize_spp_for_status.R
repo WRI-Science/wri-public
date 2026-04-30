@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(terra) # For rasterization
 library(sf) # For working with spatial (vector/shapefile) data
 library(tidyverse) # For data manipulation
@@ -10,7 +12,7 @@ sf::sf_use_s2(FALSE) # Turn it off entirely because many shapes are invalid with
 
 
 #### Base Directories ####
-data_file_path <- "/home/shares/wwri-wildfire/data/biodiversity"
+data_file_path <- file.path(wri_project_root, "data", "biodiversity")
 path_year <- "2024"
 int_data_file_path <- file.path(data_file_path, "int", path_year)
 output_path <- file.path(int_data_file_path, "species_dfs_status")
@@ -31,7 +33,7 @@ source(here("biodiversity", "00_biodiversity_custom_functions.R")) # For the pro
 shps_filtered_status_full <- append(iucn_shps_filtered_status, list(bird_spp_filtered_status))
 
 # Set up the template study area raster to rasterize the species ranges onto
-study_area_1km <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_with_na_moll.tif") # We use the 1 km resolution one because if we rasterize directly to 90 m, the data becomes too long for our current processing method. We believe this is okay for our purposes.
+study_area_1km <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_with_na_moll.tif")) # We use the 1 km resolution one because if we rasterize directly to 90 m, the data becomes too long for our current processing method. We believe this is okay for our purposes.
 
 # Prepare the raster for effective conversion of species range rasters to csv form
 study_area_1km <- study_area_1km %>%

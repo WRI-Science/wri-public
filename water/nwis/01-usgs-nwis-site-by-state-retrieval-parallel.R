@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # this will retrieve monthly (or a different time step) nwis data for the states specified, with parallelization
 
 library(dataRetrieval) # for usgs nwis data
@@ -6,7 +8,7 @@ library(foreach)
 library(doParallel)
 
 # read in manually created site list for states of interest
-# site_ids <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/raw/usgs-nwis-site-ids.csv")
+# site_ids <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "raw", "usgs-nwis-site-ids.csv"))
 # this list might be presently active sites? but we want all that have ever been active
 
 # create list of states we are interested in (add a buffer because of hydrosheds)
@@ -81,10 +83,10 @@ stopCluster(cl)
 output_list <- output_list[!sapply(output_list, is.null)]
 
 # save as rds because it's a list of dfs (need to analyze before combining due to column name diffs)
-saveRDS(output_list, "/home/shares/wwri-wildfire/data/water/int/study-area-usgs-nwis-data-with-coords-new-source-entire-us-parallel-new_2024.rds")
+saveRDS(output_list, file.path(wri_project_root, "data", "water", "int", "study-area-usgs-nwis-data-with-coords-new-source-entire-us-parallel-new_2024.rds"))
 
 # check out results
-output_list <- readRDS("/home/shares/wwri-wildfire/data/water/int/study-area-usgs-nwis-data-with-coords-new-source-entire-us-parallel-new_2024.rds")
+output_list <- readRDS(file.path(wri_project_root, "data", "water", "int", "study-area-usgs-nwis-data-with-coords-new-source-entire-us-parallel-new_2024.rds"))
 
 # get list of the different colnames and coltypes in each df
 colnames_list <- lapply(output_list, names)
@@ -117,4 +119,4 @@ output_list_fixed <- lapply(output_list, function(df) {
 output_df <- bind_rows(output_list_fixed)
 
 # write out the df
-write_csv(output_df, "/home/shares/wwri-wildfire/data/water/int/study-area-usgs-nwis-data-with-coords-new-source-entire-us_2024.csv") # problems are all with columns we don't use, so can ignore for now
+write_csv(output_df, file.path(wri_project_root, "data", "water", "int", "study-area-usgs-nwis-data-with-coords-new-source-entire-us_2024.csv")) # problems are all with columns we don't use, so can ignore for now

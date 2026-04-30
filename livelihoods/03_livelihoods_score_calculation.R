@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(sf) 
 library(tidyverse) 
 library(here) 
@@ -7,15 +9,15 @@ library(terra)
 
 #### Base directories ####
 # MAKE SURE TO CHANGE DOMAIN PATH NAME ACCORDINGLY
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/livelihoods"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/livelihoods/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/livelihoods/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/livelihoods"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "livelihoods")
+raw_data_file_path <- file.path(wri_project_root, "data", "livelihoods", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "livelihoods", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "livelihoods")
 
 #### Boundary layers ####
 study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"))
-human_settlement_layer <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/global_human_settlement_layer/human_sett_aligned.tif")
+human_settlement_layer <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "global_human_settlement_layer", "human_sett_aligned.tif"))
 
 #### Functions ####
 source(here("templates_and_functions", "align_raster_to_template.R"))
@@ -95,9 +97,9 @@ writeRaster(recovery,
 
 #### Calculate Resilience ####
 
-# status <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_status.tif")
-resistance <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_resistance.tif")
-recovery <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_recovery.tif")
+# status <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_status.tif"))
+resistance <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_resistance.tif"))
+recovery <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_recovery.tif"))
 
 # Resilience is calculated as 1 - (1 - Resistance) * (1 - Recovery)
 calc_resilience <- function(resistance, recovery) {
@@ -133,7 +135,7 @@ writeRaster(resilience,
             overwrite = TRUE)
 
 #### Calculate Domain Score ####
-resilience <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_resilience.tif")
+resilience <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_resilience.tif"))
   
 # Domain Score is calculated as the mean of status and resilience
 domain_score <- terra::mean(c(status, 

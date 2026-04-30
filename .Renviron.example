@@ -1,0 +1,4 @@
+# Copy to ".Renviron" in this repo root (or set in your shell) to override data locations.
+# Root directory must contain `data/` and `final_layers/` as used by the analysis scripts.
+#
+# WRI_PROJECT_ROOT=/path/to/your/wri-project-root

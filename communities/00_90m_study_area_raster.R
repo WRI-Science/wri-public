@@ -1,4 +1,6 @@
-#study_area_1km <- rast("/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_raster-mask-lvl-0.tif") # eventually this should be 90 m
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
+#study_area_1km <- rast(file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_raster-mask-lvl-0.tif")) # eventually this should be 90 m
 library(terra)
 library(sf)
 library(tidyverse)
@@ -6,9 +8,9 @@ library(tidyverse)
 moll_crs <- '+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m'
 
 # read in study area vector file
-study_area_vect <- vect("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp")
+study_area_vect <- vect(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_0.shp"))
 # already in equal area so we can get exactly 90 m x 90 m res
-study_area_vect_moll <- vect("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0_moll.shp")
+study_area_vect_moll <- vect(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_0_moll.shp"))
 
 # study_area_vect_4269 <- project(study_area_vect, "EPSG:4269") # make 4269 version for plotting data
 
@@ -29,9 +31,9 @@ plot(study_area_raster_90m_na)
 plot(study_area_raster_90m_na_moll)
 
 # write it out for future use
-#writeRaster(study_area_raster_90m, "/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_raster-mask-lvl-0-90m.tif", overwrite = TRUE)
-writeRaster(study_area_raster_90m_na, "/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif", overwrite = TRUE)
-writeRaster(study_area_raster_90m_na_moll, "/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na_moll.tif", overwrite = TRUE)
+#writeRaster(study_area_raster_90m, file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_raster-mask-lvl-0-90m.tif"), overwrite = TRUE)
+writeRaster(study_area_raster_90m_na, file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"), overwrite = TRUE)
+writeRaster(study_area_raster_90m_na_moll, file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_90m_with_na_moll.tif"), overwrite = TRUE)
 
 
 # # convert to 4269
@@ -47,12 +49,12 @@ writeRaster(study_area_raster_90m_na_moll, "/home/shares/wwri-wildfire/data/mult
 # plot(study_area_raster_90m_na_4269)
 
 # # write out the transformed one
-# writeRaster(study_area_raster_90m_4269, "/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_raster-mask-lvl-0-90m-4269.tif", overwrite = TRUE)
-# writeRaster(study_area_raster_90m_na_4269, "/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_raster-mask-lvl-0-90m-4269-with-na.tif", overwrite = TRUE)
+# writeRaster(study_area_raster_90m_4269, file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_raster-mask-lvl-0-90m-4269.tif"), overwrite = TRUE)
+# writeRaster(study_area_raster_90m_na_4269, file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_raster-mask-lvl-0-90m-4269-with-na.tif"), overwrite = TRUE)
 
 
 # make one for just US too for the US only data (so that Canada shows up as NA rather than 0)
-us_study_area_vect <- vect(st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp") %>% filter(!(name %in% c("British Columbia", "Yukon"))))
+us_study_area_vect <- vect(st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_1.shp")) %>% filter(!(name %in% c("British Columbia", "Yukon"))))
 # already in equal area so we can get almost exactly 90 m x 90 m res (it is conus equal area)
 
 us_study_area_vect_5070 <- project(us_study_area_vect, "EPSG:5070") # make 4269 version for plotting data
@@ -71,8 +73,8 @@ us_study_area_raster_90m_na <- rasterize(us_study_area_vect_5070, us_study_area_
 plot(us_study_area_raster_90m_na)
 
 # write it out for future use
-# writeRaster(us_study_area_raster_90m, "/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/us_wwri_study_area_raster-mask-lvl-0-90m.tif", overwrite = TRUE)
-writeRaster(us_study_area_raster_90m_na, "/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/us_wwri_study_area_raster_mask_lvl_0_90m_with_na.tif", overwrite = TRUE)
+# writeRaster(us_study_area_raster_90m, file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "us_wwri_study_area_raster-mask-lvl-0-90m.tif"), overwrite = TRUE)
+writeRaster(us_study_area_raster_90m_na, file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "us_wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"), overwrite = TRUE)
 
 # # convert to 4269
 # us_study_area_raster_90m_4269 <- us_study_area_raster_90m %>%
@@ -87,5 +89,5 @@ writeRaster(us_study_area_raster_90m_na, "/home/shares/wwri-wildfire/data/multi_
 # plot(us_study_area_raster_90m_na_4269)
 
 # # write out the transformed one
-# writeRaster(us_study_area_raster_90m_4269, "/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/us_wwri_study_area_raster-mask-lvl-0-90m-4269.tif", overwrite = TRUE)
-# writeRaster(us_study_area_raster_90m_na_4269, "/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/us_wwri_study_area_raster-mask-lvl-0-90m-4269-with-na.tif", overwrite = TRUE)
+# writeRaster(us_study_area_raster_90m_4269, file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "us_wwri_study_area_raster-mask-lvl-0-90m-4269.tif"), overwrite = TRUE)
+# writeRaster(us_study_area_raster_90m_na_4269, file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "us_wwri_study_area_raster-mask-lvl-0-90m-4269-with-na.tif"), overwrite = TRUE)

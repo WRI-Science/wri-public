@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # Goal of this script
 # The goal of this script is to calculate the resistance, recovery, resilience, status, and domain scores for the ____ domain.
 # This will use the processed 90 m indicator rasters created throughout the other scripts in this domain.
@@ -9,9 +11,9 @@ library(here)
 library(dplyr)
 
 # Set base directories
-data_file_path <- "/home/shares/wwri-wildfire/data/domain_name"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2023/domain_name"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+data_file_path <- file.path(wri_project_root, "data", "domain_name")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2023", "domain_name")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 #### Boundary layers ####
 study_area_admin1_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "boundary_layers/processed/admin-boundary-layers/wwri_study_area_admin_1.shp")) %>% 

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to take the merged area file from step 2 and calculate the counts
 # of each landcover designation in the ecoregions that intersect the study area.
@@ -16,8 +18,8 @@ library(parallel)  # For potential parallel processing
 terraOptions(memfrac=0.8)  # Use up to 80% of available memory
 
 #### File Paths ####
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data")
 raw_data_file_path <- file.path(data_file_path, "natural_habitats/raw/")
 int_data_file_path <- file.path(data_file_path, "natural_habitats/int/")
 historical_landcover_int_data_file_path <- file.path(int_data_file_path, "historical_landcover")

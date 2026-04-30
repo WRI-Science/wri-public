@@ -1,13 +1,15 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # create a CONUS CWPP viz for the newsletter
 library(tmap)
 library(sf)
 
 # read in study area files
-study_area_lvl_1 <- st_read("/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_admin_1.shp") %>%
+study_area_lvl_1 <- st_read(file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_admin_1.shp")) %>%
   filter(!(name %in% c("British Columbia", "Yukon", "Alaska"))) %>%
   st_transform(5070)
 
-study_area_lvl_2 <- st_read("/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_admin_2.shp") %>%
+study_area_lvl_2 <- st_read(file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_admin_2.shp")) %>%
   filter(!(state_name == "Alaska" | country == "Canada")) %>%
   st_transform(5070)
 

@@ -1,10 +1,12 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # this will retrieve monthly (or a different time step) nwis data for the states specified
 
 library(dataRetrieval) # for usgs nwis data
 library(tidyverse)
 
 # read in manually created site list for states of interest
-# site_ids <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/raw/usgs-nwis-site-ids.csv")
+# site_ids <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "raw", "usgs-nwis-site-ids.csv"))
 # this list might be presently active sites? but we want all that have ever been active
 
 # create list of states we are interested in (add a buffer because of hydrosheds)
@@ -77,13 +79,13 @@ for (i in seq(1, length(site_ids_for_loop), by = chunk_size)) {
 }
 
 # write list as rds to check what's wrong
-saveRDS(output_list, "/home/shares/wwri-wildfire/data/water-domain-data/int/study-area-usgs-nwis-data-with-coords-new-source-entire-us.rds")
+saveRDS(output_list, file.path(wri_project_root, "data", "water-domain-data", "int", "study-area-usgs-nwis-data-with-coords-new-source-entire-us.rds"))
 
 # make the list one big dataframe
 outputData <- do.call(rbind, output_list) # 2274950 vs 2275005 when not doing "all"
 
 # write out the list
-write_csv(outputData, "/home/shares/wwri-wildfire/data/water-domain-data/int/study-area-usgs-nwis-data-with-coords-new-source-entire-us.csv")
+write_csv(outputData, file.path(wri_project_root, "data", "water-domain-data", "int", "study-area-usgs-nwis-data-with-coords-new-source-entire-us.csv"))
 
 
 # ### get parameter code definitions
@@ -91,8 +93,8 @@ write_csv(outputData, "/home/shares/wwri-wildfire/data/water-domain-data/int/stu
 # unique(outputData$parameter_cd)
 # 
 # # read in defs for those codes
-# param_code_defs <- read_tsv("/home/shares/wwri-wildfire/data/water-domain-data/raw/parameter_cd_query.txt", skip = 7) %>%
+# param_code_defs <- read_tsv(file.path(wri_project_root, "data", "water-domain-data", "raw", "parameter_cd_query.txt"), skip = 7) %>%
 #   filter(parm_cd %in% unique(outputData$parameter_cd))
 # 
 # # write out the parameter code information for codes present in the data pulled
-# write_csv(param_code_defs, "/home/shares/wwri-wildfire/data/water-domain-data/int/param_code_defs_in_data.csv")
+# write_csv(param_code_defs, file.path(wri_project_root, "data", "water-domain-data", "int", "param_code_defs_in_data.csv"))

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # Goal of this script
 # The goal of this script is to calculate the resistance, recovery, resilience, status, and domain scores for the ____ domain.
 # This will use the processed 90 m indicator rasters created throughout the other scripts in this domain.
@@ -8,9 +10,9 @@ library(terra) # For raster manipulation
 library(here)
 
 # Set base directories
-data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_species"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_species"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_species")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_species")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 #### Boundary layers ####
 study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"))

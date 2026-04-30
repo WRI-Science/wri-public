@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(cancensus)
 library(terra)
 library(sf)
@@ -37,7 +39,7 @@ census_data_filtered <- get_census(dataset = 'CA21',
   select(-income_total, -age_total)
 
 # saving to ensure we have the data
-st_write(census_data_filtered, "/home/shares/wwri-wildfire/data/communities/raw/2024/canada_census/cancensus_2021_variables_communities.gpkg")
+st_write(census_data_filtered, file.path(wri_project_root, "data", "communities", "raw", "2024", "canada_census", "cancensus_2021_variables_communities.gpkg"))
 
 # remove spatial data for now after saving
 census_data_filtered <- census_data_filtered %>%
@@ -60,7 +62,7 @@ census_data_filtered_gf <- get_census(dataset='CA21', regions=list(PR = regions_
   select(-income_total_gf, -age_total_gf)
 
 # saving to ensure we have the data
-st_write(census_data_filtered_gf, "/home/shares/wwri-wildfire/data/communities/raw/2024/canada_census/cancensus_variables_communities_gf.gpkg")
+st_write(census_data_filtered_gf, file.path(wri_project_root, "data", "communities", "raw", "2024", "canada_census", "cancensus_variables_communities_gf.gpkg"))
 
 # remove spatial data for now after saving
 census_data_filtered_gf <- census_data_filtered_gf %>%
@@ -87,8 +89,8 @@ census_data_filtered_full <- census_data_filtered %>%
 #### POPULATION ####
 # not needed because population is included on cancensus
 # prepare overall population data, primarily to determine if data should be gapfilled (only pops > 0 get gapfilled)
-# population_data_bc <- read_csv("/home/shares/wwri-wildfire/data/air-quality/vulnerable_populations/98-401-X2021026_eng_CSV_YT_subdivisions_only/98-401-X2021026_English_CSV_data.csv")
-# population_data_yk <- read_csv("/home/shares/wwri-wildfire/data/air-quality/vulnerable_populations/98-401-X2021025_eng_CSV_BC_subdivisions_only/98-401-X2021025_English_CSV_data.csv")
+# population_data_bc <- read_csv(file.path(wri_project_root, "data", "air-quality", "vulnerable_populations", "98-401-X2021026_eng_CSV_YT_subdivisions_only", "98-401-X2021026_English_CSV_data.csv"))
+# population_data_yk <- read_csv(file.path(wri_project_root, "data", "air-quality", "vulnerable_populations", "98-401-X2021025_eng_CSV_BC_subdivisions_only", "98-401-X2021025_English_CSV_data.csv"))
 
 # # explore some variables
 # View(population_data_bc %>%
@@ -97,7 +99,7 @@ census_data_filtered_full <- census_data_filtered %>%
 #### RENTERS ####
 # read in canada renter vs. owner data
 # https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810024301&pickMembers%5B0%5D=1.3&pickMembers%5B1%5D=2.1&pickMembers%5B2%5D=3.1&pickMembers%5B3%5D=4.1
-base_file_path <- "/home/shares/wwri-wildfire"
+base_file_path <- file.path(wri_project_root)
 canadian_housing_path <- file.path(base_file_path, "data/livelihoods/raw/canada-housing-burden/98100243.csv")
 
 # read in canada housing file and select only yukon and BC
@@ -163,7 +165,7 @@ canada_owners_gapfilled <- canada_owners_subdiv %>%
 
 
 #### POVERTY ####
-base_file_path <- "/home/shares/wwri-wildfire"
+base_file_path <- file.path(wri_project_root)
 canadian_poverty_path <- file.path(base_file_path, "data/communities/raw/2024/canada_census/98100113-eng/98100113.csv")
 
 # read in canada poverty file and select only yukon and BC
@@ -212,7 +214,7 @@ canada_poverty_gapfilled <- canada_poverty_subdiv %>%
 
 #### DISABILITY ####
 # read in province level data
-base_file_path <- "/home/shares/wwri-wildfire"
+base_file_path <- file.path(wri_project_root)
 canadian_disability_path <- file.path(base_file_path, "data/communities/raw/2024/canada_census/13100374-eng/13100374.csv")
 
 # read in canada poverty file and select only yukon and BC
@@ -243,4 +245,4 @@ can_census_variables_people_full <- canada_disability_gapfilled %>%
   select(geo_id, population, greater_than_200k, age_65_plus, owner = owners, poverty = poverty_rate, disability = disability_rate) %>% # final clean up
   mutate(no_vehicle = NA) # for matching with ACS data
   
-write_csv(can_census_variables_people_full, "/home/shares/wwri-wildfire/data/communities/int/2024/canada_census/can_census_variables_communities_full.csv") # write out correct direction instead?
+write_csv(can_census_variables_people_full, file.path(wri_project_root, "data", "communities", "int", "2024", "canada_census", "can_census_variables_communities_full.csv")) # write out correct direction instead?

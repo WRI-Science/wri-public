@@ -141,4 +141,4 @@ Measures inter-annual NDVI variability (rolling standard deviation) as a proxy f
 ---
 
 ## Output
-Final raster layers are written to `/home/shares/wwri-wildfire/final_layers/2024/natural_habitats/`.
+Final raster layers are written under **`{WRI_PROJECT_ROOT}/final_layers/<year>/natural_habitats/`** (see the repository root [README](../README.md) for configuring `WRI_PROJECT_ROOT`).

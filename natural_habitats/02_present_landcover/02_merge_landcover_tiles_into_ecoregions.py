@@ -1,3 +1,7 @@
+import os
+
+WRI_PROJECT_ROOT = os.environ.get("WRI_PROJECT_ROOT", "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to take the landcover tiles saved and reprojected then merge and mask them to each ecoregion so each ecoregion can be processed individually and then spatial stats can be calculated after.
 
@@ -34,7 +38,7 @@ import planetary_computer
 year = 2023
 
 # Base directory for all natural habitats data
-data_root = "/home/shares/wwri-wildfire/data/natural_habitats/"
+data_root = os.path.join(WRI_PROJECT_ROOT, "data", "natural_habitats")
 
 # Directory containing raw, reprojected STAC tiles for this year
 reprojected_dir = os.path.join(
@@ -42,7 +46,7 @@ reprojected_dir = os.path.join(
 )
 
 # Path to the ecoregions shapefile (intersecting study area)
-multi_domain = "/home/shares/wwri-wildfire/data/multi_domain_data"
+multi_domain = os.path.join(WRI_PROJECT_ROOT, "data", "multi_domain_data")
 ecoregion_shapefile = os.path.join(
     multi_domain,
     "int/epa_ecoregions_north_america_level_iii",

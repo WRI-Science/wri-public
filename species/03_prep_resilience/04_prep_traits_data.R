@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse) # For data manipulation
 
 
@@ -6,7 +8,7 @@ library(tidyverse) # For data manipulation
 
 
 #### Base Directories ####
-data_file_path <- "/home/shares/wwri-wildfire/data/biodiversity"
+data_file_path <- file.path(wri_project_root, "data", "biodiversity")
 path_year <- "2024"
 int_data_file_path <- file.path(data_file_path, "int", path_year)
 output_path_prev <- file.path(int_data_file_path, "species_dfs_status") # output_path from previous steps of status processing
@@ -15,7 +17,7 @@ output_path <- file.path(int_data_file_path, "species_dfs_resilience") # output_
 
 #### Data Layers ####
 # Read in the traits data that contains our species (year-over-year new species may need to be added)
-traits <- read_csv("/home/shares/wwri-wildfire/data/multi_domain_data/traits/final_trait_lists/animal_traits_iucn_species.csv") # Manually created/coded by Rachel King
+traits <- read_csv(file.path(wri_project_root, "data", "multi_domain_data", "traits", "final_trait_lists", "animal_traits_iucn_species.csv")) # Manually created/coded by Rachel King
 
 # Read in the IUCN Red List data from the API that was saved in the previous step
 iucn_red_list_from_api <- read.csv(file.path(output_path_prev, "iucn_red_list_from_api.csv")) %>%

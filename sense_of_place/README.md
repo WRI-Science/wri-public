@@ -70,4 +70,4 @@ Iconic species are scored based on their threat status (NatureServe global rank)
 ---
 
 ## Output
-Final raster layers are written to `/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/`.
+Final raster layers are written under **`{WRI_PROJECT_ROOT}/final_layers/<year>/sense_of_place/`** (see the repository root [README](../README.md) for configuring `WRI_PROJECT_ROOT`).

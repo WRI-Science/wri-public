@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # The data are organized in tiles of 100 km x 100 km and follow the EQUI7 tiling grid and projection system. 
 # The images are compressed GeoTiff files (*.tif). There is a mosaic in GDAL Virtual format (*.vrt), which can readily be opened in 
 # most Geographic Information Systems. Please consider the generation of image pyramids before using *.vrt files.
@@ -35,11 +37,11 @@ library(future)
 
 #### Base directories ####
 # MAKE SURE TO CHANGE DOMAIN PATH NAME ACCORDINGLY
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_places"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_places/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_places/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_places"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_places")
+raw_data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_places", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_places", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_places")
 
 #### Boundary layers ####
 study_area_admin1_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp"))
@@ -49,7 +51,7 @@ study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "int/boundary
 source(here("templates_and_functions", "align_raster_to_template.R"))
 
 #### Data Layers ####
-wilderness_urban_interface_5070_rescaled <- rast("/home/shares/wwri-wildfire/final_layers/2024/infrastructure/indicators/infrastructure_resistance_wildland_urban_interface_unmasked.tif")
+wilderness_urban_interface_5070_rescaled <- rast(file.path(wri_project_root, "final_layers", "2024", "infrastructure", "indicators", "infrastructure_resistance_wildland_urban_interface_unmasked.tif"))
 # 20096 entries
 historic_structures <- st_read(file.path(intermediate_data_file_path, "wwri_historic_structures_buffered.gpkg")) %>% 
   rename(geometry = geom)
@@ -67,7 +69,7 @@ wwri_historic_structures_combined_vect <- vect(historic_structures)
 
 # Extract cell values from the WUI raster at each buffered point and polygon
 # THIS TOOK 1.5 HOURS TO RUN !! - read in gpkg from intermediate folder
-#historic_structures_wui <- st_read("/home/shares/wwri-wildfire/data/sense_of_place/iconic_places/intermediate/historic_structures_wui_scores.gpkg")
+#historic_structures_wui <- st_read(file.path(wri_project_root, "data", "sense_of_place", "iconic_places", "intermediate", "historic_structures_wui_scores.gpkg"))
 
 wui_cell_values <- terra::extract(wilderness_urban_interface_5070_rescaled, 
                                   wwri_historic_structures_combined_vect, 

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse) # For data manipulation
 library(sf) # Needed for the RDS files since they are spatial
 
@@ -8,7 +10,7 @@ library(sf) # Needed for the RDS files since they are spatial
 
 
 #### Base Directories ####
-data_file_path <- "/home/shares/wwri-wildfire/data/biodiversity"
+data_file_path <- file.path(wri_project_root, "data", "biodiversity")
 path_year <- "2024"
 int_data_file_path <- file.path(data_file_path, "int", path_year)
 output_path_prev <- file.path(int_data_file_path, "species_data_with_initial_processing") # output_path from previous step  of initial processing

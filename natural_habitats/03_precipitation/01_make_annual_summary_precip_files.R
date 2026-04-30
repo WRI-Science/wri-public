@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to make an annual summary file for each year of the 
 # terraclimate data. This step does not need to be run if the annual summary outputs already exist, 
@@ -9,7 +11,7 @@ library(parallel)
 
 #### Files Paths and Setup ####
 
-natural_habitats_root <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+natural_habitats_root <- file.path(wri_project_root, "data", "natural_habitats")
 raw_ppt_path <- paste0(natural_habitats_root, "raw/terraclimate/ppt/")
 
 output_dir <- paste0(natural_habitats_root, "int/terraclimate/ppt_annual_sums/")

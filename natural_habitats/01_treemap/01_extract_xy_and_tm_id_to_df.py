@@ -1,3 +1,7 @@
+import os
+
+WRI_PROJECT_ROOT = os.environ.get("WRI_PROJECT_ROOT", "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of the script is to make an xy csv dataframe of the raw raster data from treemap.
 # This will let us move forward with the other calculations needed from this data including 
@@ -21,11 +25,11 @@ start_time = time.time()
 #### Paths and Setup #### 
 redo_all = True   # or True, if you want to force a full re‐run
 
-multi_domain_data_path = "/home/shares/wwri-wildfire/data/multi_domain_data/"
+multi_domain_data_path = os.path.join(WRI_PROJECT_ROOT, "data", "multi_domain_data")
 raw_treemap_data_base = f"{multi_domain_data_path}raw/treemap/from_publication_zip/Data/"
 tif_path    = f"{raw_treemap_data_base}TreeMap2016.tif"
 dbf_path    = f"{raw_treemap_data_base}TreeMap2016.tif.vat.dbf"
-shape_path  = "/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp"
+shape_path  = os.path.join(WRI_PROJECT_ROOT, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_0.shp")
 
 # Save Paths
 xy_value_int_path = f"{multi_domain_data_path}int/treemap/study_area_points.feather"

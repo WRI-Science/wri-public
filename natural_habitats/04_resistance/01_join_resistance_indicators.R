@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### GOAL ####
 # The goal of this script is to make the resistance layer from the indicators for 
 # the natural habitats domain. The individual indicator layers should be finalized 
@@ -12,8 +14,8 @@ library(terra)
 
 #### Setup and File Paths ####
 year_of_interest <- 2024
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
 
 # Setup terra options for parallel processing
 terraOptions(
@@ -21,8 +23,8 @@ terraOptions(
   memfrac = 0.80      # Limit RAM usage to 90%
 )
 
-not_masked_indicator_data_path <- paste0("/home/shares/wwri-wildfire/final_layers/", year_of_interest, "/natural_habitats/indicators_no_mask/")
-masked_indicator_path <- paste0("/home/shares/wwri-wildfire/final_layers/", year_of_interest, "/natural_habitats/indicators_mask/")
+not_masked_indicator_data_path <- file.path(wri_project_root, "final_layers", year_of_interest, "natural_habitats", "indicators_no_mask")
+masked_indicator_path <- file.path(wri_project_root, "final_layers", year_of_interest, "natural_habitats", "indicators_mask")
 
 resistance_traits <- "natural_habitats_resistance_tree_traits.tif"
 resistance_density <- "natural_habitats_resistance_density.tif"
@@ -65,7 +67,7 @@ ag_urban_mask <- align_raster_to_template(
 message("Ag/urban mask aligned to template")
 
 resistance_save_path <- paste0(
-  "/home/shares/wwri-wildfire/final_layers/", year_of_interest,
+  file.path(wri_project_root, "final_layers"), year_of_interest,
   "/natural_habitats/natural_habitats_resistance.tif"
 )
 

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # script for occupational hazard (jobs) affected by poor Air Quality 
 # NAICS codes for (11) Agriculture, Forestry, Fishing and Hunting and (23) Construction
 
@@ -22,11 +24,11 @@ library(here)
 
 #### Base directories ####
 # MAKE SURE TO CHANGE DOMAIN PATH NAME ACCORDINGLY
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/air_quality"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/air_quality/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/air_quality/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/air_quality"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "air_quality")
+raw_data_file_path <- file.path(wri_project_root, "data", "air_quality", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "air_quality", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "air_quality")
 
 #### Boundary layers ####
 study_area_admin0_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp")) 
@@ -298,7 +300,7 @@ writeRaster(air_quality_resistance_vulnerable_workers,
             filename = file.path(final_layers_file_path, "indicators/air_quality_resistance_vulnerable_workers.tif"),
             overwrite = TRUE)
 
-plot(rast("/home/shares/wwri-wildfire/final_layers/2024/air_quality/indicators/air_quality_resistance_vulnerable_workers.tif"))
+plot(rast(file.path(wri_project_root, "final_layers", "2024", "air_quality", "indicators", "air_quality_resistance_vulnerable_workers.tif")))
 
 #### Data Visualization with CRS 5070 for newsletter ####
 

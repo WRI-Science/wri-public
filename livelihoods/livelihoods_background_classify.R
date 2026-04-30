@@ -1,14 +1,16 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(terra)
 library(sf)
 library(foreach)
 library(doParallel)
 
 # Check 1: No positive differences
-livelihoods_status <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_status.tif")
-livelihoods_resistance <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_resistance.tif")
-livelihoods_recovery <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_recovery.tif")
-livelihoods <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_domain_score_mean.tif")
-states_vect <- vect("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")
+livelihoods_status <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_status.tif"))
+livelihoods_resistance <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_resistance.tif"))
+livelihoods_recovery <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_recovery.tif"))
+livelihoods <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_domain_score_mean.tif"))
+states_vect <- vect(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_1.shp"))
 
 # Check 2: NA Checking (ideally want all 7s)
 # Set up parallel backend
@@ -35,10 +37,10 @@ classify_na_type <- function(v) {
 # Parallel loop
 results <- foreach(i = 1:length(states_vect), .packages = c("terra", "sf")) %dopar% {
   # Read in necessary data in the parallel environment
-  states_vect <- vect("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")
-  livelihoods_status <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_status.tif")
-  livelihoods_resistance <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_resistance.tif")
-  livelihoods_recovery <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_recovery.tif")
+  states_vect <- vect(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_1.shp"))
+  livelihoods_status <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_status.tif"))
+  livelihoods_resistance <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_resistance.tif"))
+  livelihoods_recovery <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_recovery.tif"))
   
   # Stack the layers of interest
   livelihoods_stack <- c(livelihoods_status, livelihoods_resistance, livelihoods_recovery)
@@ -55,7 +57,7 @@ results <- foreach(i = 1:length(states_vect), .packages = c("terra", "sf")) %dop
   classified <- app(masked, classify_na_type)
   
   # Write output raster for the state
-  out_path <- paste0("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_classified_", state_name, ".tif")
+  out_path <- file.path(wri_project_root, "final_layers", "2024", "livelihoods", paste0("livelihoods_classified_", state_name, ".tif"))
   writeRaster(classified, out_path, overwrite=TRUE)
   
   return(out_path)
@@ -64,7 +66,7 @@ results <- foreach(i = 1:length(states_vect), .packages = c("terra", "sf")) %dop
 stopCluster(cl)
 
 # Folder where files were saved
-out_folder <- "/home/shares/wwri-wildfire/final_layers/2024/livelihoods/"
+out_folder <- file.path(wri_project_root, "final_layers", "2024", "livelihoods")
 
 # List all chunk files
 chunk_files <- list.files(out_folder, pattern = "^livelihoods_classified_.*\\.tif$", full.names = TRUE)
@@ -82,4 +84,4 @@ writeRaster(merged_raster,
             file.path(out_folder, "livelihoods_classified_merged.tif"),
             overwrite = TRUE)
 
-plot(rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_classified_merged.tif"))
+plot(rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_classified_merged.tif")))

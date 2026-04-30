@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal #### 
 # The goal of this script is to take the 90m ecoregion layers make in step 5 and make them into a single mask.
 # The ag/urban mask will be used to remove ag/urban areas from every natural habitats indicator layer.
@@ -18,7 +20,7 @@ redo_all <- TRUE
 num_cores_clean <- 3   # for the tile‐cleaning step
 num_cores_mask  <- 3    # for building the three masks
 
-data_root               <- "/home/shares/wwri-wildfire/data/natural_habitats"
+data_root               <- file.path(wri_project_root, "data", "natural_habitats")
 present_landcover_path  <- file.path(data_root, "int/esri_present_landcover", as.character(year))
 
 masks <- list(
@@ -41,7 +43,7 @@ dir.create(file.path(present_landcover_path, "full_masks"), recursive = TRUE, sh
 
 # Template Raster (for masking & extent/resolution)
 template_raster_path <- file.path(
-  "/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers",
+  file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers"),
   "admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"
 )
 

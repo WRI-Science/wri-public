@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(readr)
 library(dplyr)
 library(purrr)
@@ -10,9 +12,9 @@ library(sf)
 library(here)
 
 # Set base directories
-data_file_path <- "/home/shares/wwri-wildfire/data/infrastructure"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2023/infrastructure"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+data_file_path <- file.path(wri_project_root, "data", "infrastructure")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2023", "infrastructure")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 #### Boundary layers ####
 study_area_admin1_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")) %>% 
@@ -20,7 +22,7 @@ study_area_admin1_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "
 study_area_admin0_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp")) %>% 
   st_transform(5070)
 study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"))
-human_settlement_layer <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/human_settlement/human_sett_aligned.tif")
+human_settlement_layer <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "human_settlement", "human_sett_aligned.tif"))
 
 #### Functions ####
 source(here("templates_and_functions", "align_raster_to_template.R"))
@@ -29,7 +31,7 @@ states <- c("Alaska", "Washington", "Oregon", "California", "Idaho", "Nevada", "
 #### Data Layers ####
 
 # US and Canada road network statistics
-us_network_statistics <- read.csv("/home/shares/wwri-wildfire/papers/networks_paper/output_csvs/combined_csv/combined_data.csv") %>%
+us_network_statistics <- read.csv(file.path(wri_project_root, "papers", "networks_paper", "output_csvs", "combined_csv", "combined_data.csv")) %>%
   rename(
     state = state_x) %>%
   filter(state %in% states) %>% 
@@ -45,7 +47,7 @@ us_network_statistics <- read.csv("/home/shares/wwri-wildfire/papers/networks_pa
   mutate(GEOID = as.character(GEOID))
 
 # 329
-canada_network_statistics <- read.csv("/home/shares/wwri-wildfire/data/infrastructure/intermediate/road_network/2023/canada_network_statistics.csv") %>%
+canada_network_statistics <- read.csv(file.path(wri_project_root, "data", "infrastructure", "intermediate", "road_network", "2023", "canada_network_statistics.csv")) %>%
   mutate(DPLUID = as.character(DPLUID), PRUID = as.character(PRUID)) %>%
   dplyr::select(
     DPLUID, DGUID, DPLNAME, DPLTYPE, LANDAREA, PRUID, boundary_crossing_edges_motorway,
@@ -66,12 +68,12 @@ can_cdp_equivalent <- st_read(file.path(data_file_path, "intermediate/road_netwo
 
 #### code to identify CAN population areas with >50k population ####
 
-can_sbd_shapefile <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/canada_census_subdivisions/canada_census_subdivisions.shp") %>% 
+can_sbd_shapefile <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "canada_census_subdivisions", "canada_census_subdivisions.shp")) %>% 
   st_transform(5070)
-shapefile_path_dpls = st_read("/home/shares/wwri-wildfire/data/multi_domain_data/raw/boundary_layers/canada_designated_places/ldpl000b21a_e.shp") %>% 
+shapefile_path_dpls = st_read(file.path(wri_project_root, "data", "multi_domain_data", "raw", "boundary_layers", "canada_designated_places", "ldpl000b21a_e.shp")) %>% 
   st_transform(5070) %>% 
   filter(PRUID %in% c(59, 60))
-shapefile_path_pcenters = st_read("/home/shares/wwri-wildfire/data/multi_domain_data/raw/boundary_layers/canada_population_centers/lpc_000b21a_e.shp") %>% 
+shapefile_path_pcenters = st_read(file.path(wri_project_root, "data", "multi_domain_data", "raw", "boundary_layers", "canada_population_centers", "lpc_000b21a_e.shp")) %>% 
   st_transform(5070) %>% 
   filter(PRUID %in% c(59, 60))
 
@@ -79,9 +81,9 @@ shapefile_path_pcenters = st_read("/home/shares/wwri-wildfire/data/multi_domain_
 shapefile_pcenters_dpls <- bind_rows(shapefile_path_pcenters, shapefile_path_dpls)
 
 # CSV file paths with population
-csv_path_population_centers = read_csv('/home/shares/wwri-wildfire/data/infrastructure/canada-population-centers-population/98100011.csv')
+csv_path_population_centers = read_csv(file.path(wri_project_root, "data", "infrastructure", "canada-population-centers-population", "98100011.csv"))
 # Canada subdivision population data
-can_subdivision_population <- read_csv("/home/shares/wwri-wildfire/data/infrastructure/canada-subdivision-population/98100004.csv")
+can_subdivision_population <- read_csv(file.path(wri_project_root, "data", "infrastructure", "canada-subdivision-population", "98100004.csv"))
 
 # add population to subdivisions and filter for places >50k
 # 20 
@@ -492,6 +494,6 @@ print(all_summary_stats_by_state_province_country)
 
 # Save the summary statistics to a CSV file
 write.csv(all_summary_stats_by_state_province, 
-          "/home/shares/wwri-wildfire/data/infrastructure/intermediate/resistance/road-network/all_summary_stats_by_state_province.csv", 
+          file.path(wri_project_root, "data", "infrastructure", "intermediate", "resistance", "road-network", "all_summary_stats_by_state_province.csv"), 
           row.names = FALSE)
 

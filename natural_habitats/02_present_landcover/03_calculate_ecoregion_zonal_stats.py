@@ -1,3 +1,7 @@
+import os
+
+WRI_PROJECT_ROOT = os.environ.get("WRI_PROJECT_ROOT", "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to generate the zonal stats of each ecoregion to calculate the percent of each that we consider natural.
 # The script will process the ecoreiogn rasters from step 2. Once this step is complete the output will be used to calculate 
@@ -18,11 +22,11 @@ from tqdm import tqdm
 year = 2023
 
 # Base directory for all natural habitats data
-data_root = "/home/shares/wwri-wildfire/data/natural_habitats/"
+data_root = os.path.join(WRI_PROJECT_ROOT, "data", "natural_habitats")
 
 # File paths
 # Path to the ecoregions shapefile (intersecting study area)
-multi_domain = "/home/shares/wwri-wildfire/data/multi_domain_data"
+multi_domain = os.path.join(WRI_PROJECT_ROOT, "data", "multi_domain_data")
 ecoregion_shapefile = os.path.join(
     multi_domain,
     "int/epa_ecoregions_north_america_level_iii",

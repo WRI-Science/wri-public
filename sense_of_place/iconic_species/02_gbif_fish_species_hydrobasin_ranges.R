@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # this script is to pull feshwater fish RGBIF points and map points onto hydrobasins level 8
 # pull hyrdobasin boundaries that intersect with points
 # create fish range maps from those hydrobasins level 8 
@@ -15,17 +17,17 @@ library(rnaturalearthdata)
 library(furrr)
 
 # Set base directories
-data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_species"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_species/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_species/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_species"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_species")
+raw_data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_species", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_species", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_species")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 #### Boundary Layers ####
 
 moll_crs <- '+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m'
 hydrobasins <- file.path(multi_domain_data_file_path, "raw/boundary_layers/hydro_basins/raw/")
-north_america <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/species_range_north_america_study_area.shp")
+north_america <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "species_range_north_america_study_area.shp"))
 
 #### Data Layers ####
 

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal #### 
 # The goal of this script is to compute the min and mean sd the NDVI data 
 # across the entire year from the rasters generated in step 1. Once those rasters
@@ -22,7 +24,7 @@ terraOptions(
 year_of_interest <- 2024
 
 # Paths
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
 int_ndvi_path <- paste0(natural_habitats_base_path, "int/NDVI/", year_of_interest, "/")
 ndvi_sd_path <- paste0(int_ndvi_path, "/rolling_sd/")
 # put mean in unrescaled indicators folder
@@ -33,13 +35,13 @@ output_min_path <- paste0(int_ndvi_path, "mean_min_sd/", "NDVI_", year_of_intere
 rescaled_mean_path <- paste0(natural_habitats_base_path, "rescaled_indicators/", year_of_interest, "/", "NDVI_", year_of_interest, "_mean_sd_rescaled.tif")
 #rescaled_min_path <- paste0(int_ndvi_path, "mean_min_sd/", "NDVI_", year_of_interest, "_min_sd_rescaled.tif")
 
-final_layer_output_path_mask <- paste0("/home/shares/wwri-wildfire/final_layers/", year_of_interest, "/natural_habitats/indicators_mask/natural_habitats_resistance_NDVI.tif")
-final_layer_output_path_no_mask <- paste0("/home/shares/wwri-wildfire/final_layers/", year_of_interest, "/natural_habitats/indicators_no_mask/natural_habitats_resistance_NDVI.tif")
+final_layer_output_path_mask <- file.path(wri_project_root, "final_layers", year_of_interest, "natural_habitats", "indicators_mask", "natural_habitats_resistance_NDVI.tif")
+final_layer_output_path_no_mask <- file.path(wri_project_root, "final_layers", year_of_interest, "natural_habitats", "indicators_no_mask", "natural_habitats_resistance_NDVI.tif")
 
 # sensitivity_test_output_path <- paste0(natural_habitats_base_path, "sensitivity_testing/", "NDVI_", year_of_interest, "_min_sd_rescaled.tif")
 
 # Ecoregion shapefile
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 ecoregion_intersection_path <- file.path(multi_domain_data_file_path, 
                                          "int/boundary_layers/epa_ecoregions_north_america_level_iii/intersecting_ecoregion_shapes/ecoregions_intersecting_study_area.shp")
 

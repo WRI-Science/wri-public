@@ -1,30 +1,32 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(terra)
 library(readr)
 library(knitr)
 library(kableExtra)
 
 # read in vector of study area to add as borders on the plots
-study_area_vect <- vect("/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_admin_0.shp")
+study_area_vect <- vect(file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_admin_0.shp"))
 
 # read in all data rasts
-vol_fire_depts_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/vol_fire_depts_4269.tif")
-firewise_comms_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/firewise_comms_4269.tif")
-not_in_poverty_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/poverty_data_rast_4269.tif")
-not_renter_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/renter_data_rast_4269.tif")
-greater_than_200k_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/greater_than_200k_rast_4269.tif")
-age_64_under_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/age_65_plus_rast_4269.tif")
-no_disability_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/disability_rast_4269.tif")
-has_vehicle_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/no_vehicle_rast_4269.tif")
-population_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/population_rast_4269.tif")
-cwpp_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/cwpps_4269.tif")
-incorporation_rast <- rast("/home/shares/wwri-wildfire/domains/sense-of-place/people/incorporation_4269.tif")
+vol_fire_depts_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "vol_fire_depts_4269.tif"))
+firewise_comms_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "firewise_comms_4269.tif"))
+not_in_poverty_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "poverty_data_rast_4269.tif"))
+not_renter_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "renter_data_rast_4269.tif"))
+greater_than_200k_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "greater_than_200k_rast_4269.tif"))
+age_64_under_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "age_65_plus_rast_4269.tif"))
+no_disability_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "disability_rast_4269.tif"))
+has_vehicle_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "no_vehicle_rast_4269.tif"))
+population_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "population_rast_4269.tif"))
+cwpp_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "cwpps_4269.tif"))
+incorporation_rast <- rast(file.path(wri_project_root, "domains", "sense-of-place", "people", "incorporation_4269.tif"))
 
 # # read in csv form of data for histograms/summary stats
-# census_variables_people_full <- read_csv("/home/shares/wwri-wildfire/domains/sense-of-place/people/census_variables_people_full.csv")
-# census_variables_people_full_correct_direction <- read_csv("/home/shares/wwri-wildfire/domains/sense-of-place/people/census_variables_people_full_correct_direction.csv")
+# census_variables_people_full <- read_csv(file.path(wri_project_root, "domains", "sense-of-place", "people", "census_variables_people_full.csv"))
+# census_variables_people_full_correct_direction <- read_csv(file.path(wri_project_root, "domains", "sense-of-place", "people", "census_variables_people_full_correct_direction.csv"))
 
 # get the study area extent for cropping/plotting
-study_area_1km <- rast("/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_raster-mask-lvl-0.tif")
+study_area_1km <- rast(file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_raster-mask-lvl-0.tif"))
 ref_extent <- ext(study_area_1km)
 
 # crop to ref extent

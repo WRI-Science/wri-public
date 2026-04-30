@@ -1,15 +1,17 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse)
 library(sf)
 
 # set base dir
-base_dir <- "/home/shares/wwri-wildfire"
+base_dir <- file.path(wri_project_root)
 
 # read in original data
-us_stream_data_full <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/int/study-area-usgs-nwis-data-with-coords-new-source-entire-us.csv") %>%
+us_stream_data_full <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "int", "study-area-usgs-nwis-data-with-coords-new-source-entire-us.csv")) %>%
   filter(parameter_cd == "00060") %>%
   select(site_no, flow = mean_va, year = year_nu, month = month_nu) #%>%
   #drop_na(flow) # not needed for US
-canada_stream_data_full <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/int/canadian-streamflow-data-full.csv") %>%
+canada_stream_data_full <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "int", "canadian-streamflow-data-full.csv")) %>%
   filter(sum_stat == "MEAN") %>%
   mutate(value_us_units = value * 35.3147) %>%
   select(site_no = station_number, flow = value_us_units, year, month) #%>%
@@ -17,14 +19,14 @@ canada_stream_data_full <- read_csv("/home/shares/wwri-wildfire/data/water-domai
 stream_data_full <- rbind(us_stream_data_full, canada_stream_data_full)
 
 # read in canada data
-canada_stream_data <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/int/canadian-streamflow-data-30-yr-and-recent.csv") %>%
+canada_stream_data <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "int", "canadian-streamflow-data-30-yr-and-recent.csv")) %>%
   drop_na(value_us_units)
 canada_stream_sites <- canada_stream_data %>%
   select(site_no = station_number) %>%
   distinct()
 
 # read in us data
-us_stream_data <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/int/us-streamflow-data-30-yr-and-recent.csv")
+us_stream_data <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "int", "us-streamflow-data-30-yr-and-recent.csv"))
 us_stream_sites <- us_stream_data %>%
   select(site_no) %>% 
   distinct()
@@ -71,13 +73,13 @@ get_hydrobasins <- function(base_dir, level = "lev08") { # default to level 8
 hydrobasins_lev08 <- get_hydrobasins(base_dir, "lev08")
 
 # ensure only basins that touch study area are kept
-study_area <- st_read("/home/shares/wwri-wildfire/data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_admin_0.shp") %>%
+study_area <- st_read(file.path(wri_project_root, "data", "multi-domain-data", "boundary-layers", "processed", "admin-boundary-layers", "wwri_study_area_admin_0.shp")) %>%
   st_transform(., "EPSG:5070")
 
 hydrobasins_lev08_study_area <- st_filter(hydrobasins_lev08, study_area, .predicate = st_intersects)
 
 # read in site to hydrobasin lvl 8 alignment
-filled_hybas8_study_area <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/int/hydrobasins_lvl8_filled_w_sites.csv") %>%
+filled_hybas8_study_area <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "int", "hydrobasins_lvl8_filled_w_sites.csv")) %>%
   filter(id_lev08 %in% hydrobasins_lev08_study_area$id_lev08)
 
 # join site data to alignment with basins

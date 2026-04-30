@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to combine the two parts of the status calculation 
 # for natural habitats, make it into a raster, and save  the raster as the status layer
@@ -11,8 +13,8 @@ year_of_interest <- 2024
 # source alignment function
 source(here::here("templates_and_functions", "align_raster_to_template.R"))
 
-natural_habitats_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
-multi_domain_data_base_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+natural_habitats_path <- file.path(wri_project_root, "data", "natural_habitats")
+multi_domain_data_base_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 protected_areas_path <- file.path(natural_habitats_path, "int/cec_protected_areas/ecoregion_protection_rescaled.csv")
 
@@ -63,7 +65,7 @@ message("Ag/urban mask aligned to template")
 
 # save paths
 status_save_path <- paste0(
-  "/home/shares/wwri-wildfire/final_layers/", year_of_interest,
+  file.path(wri_project_root, "final_layers"), year_of_interest,
   "/natural_habitats/natural_habitats_status.tif"
 )
 

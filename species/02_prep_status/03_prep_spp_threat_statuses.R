@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(terra) # For rasterization
 library(sf) # For working with spatial (vector/shapefile) data
 library(tidyverse) # For data manipulation
@@ -10,7 +12,7 @@ api_key <- Sys.getenv('IUCN_KEY') # Get your IUCN API key from your .renv file
 
 
 #### Base Directories ####
-data_file_path <- "/home/shares/wwri-wildfire/data/biodiversity"
+data_file_path <- file.path(wri_project_root, "data", "biodiversity")
 path_year <- "2024"
 int_data_file_path <- file.path(data_file_path, "int", path_year)
 output_path <- file.path(int_data_file_path, "species_dfs_status")

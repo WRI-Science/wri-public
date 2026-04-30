@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 
 # the goal of this script is to rescale the diversity data for SCANFI and 
@@ -14,8 +16,8 @@ library(terra)
 #### Setup and File Paths ####
 redo_all <- FALSE # set to TRUE to redo all steps
 
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 merged_cover_raw_path <-  paste0(natural_habitats_base_path, "int/scanfi/scanfi_merged_closure_all_species.csv")
 

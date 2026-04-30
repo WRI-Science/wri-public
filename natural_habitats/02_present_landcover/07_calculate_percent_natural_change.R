@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal #### 
 # The goal of this script is to calculate the change in percent natural from 
 # 2005 and 2015 to the present year for each ecoregion. The output for this script can then be rescaled 
@@ -16,7 +18,7 @@ year_of_data <- 2023
 output_index_year <- 2024
 
 # these paths will need to be updated with our new file structure once they are generated in the correct spots
-natural_habitats_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+natural_habitats_path <- file.path(wri_project_root, "data", "natural_habitats")
 present_percent_natural_path <- file.path(natural_habitats_path, "int/esri_present_landcover/", as.character(year_of_data), "percent_natural_calculation", paste0("ecoregion_natural_extent_pct_", year_of_data, ".csv"))
 
 percent_natural_2005_path <- file.path(natural_habitats_path, "int/historical_landcover/percent_natural_ecoregion_2005.csv")
@@ -26,12 +28,12 @@ change_in_percent_natural_save_path <- file.path(natural_habitats_path, "int/lan
 # presently, we are using the 2005 layer as the indicator layer and the 2015 will be for sensitivity testing
 # this means the 2005 one will be saved in two places
 percent_change_2005_raster_path <- file.path(natural_habitats_path, "rescaled_indicators/natural_habitats_status_extent_change_2005.tif")
-percent_change_2005_raster_final_layers_path <- file.path("/home/shares/wwri-wildfire/final_layers/", as.character(output_index_year), "natural_habitats/indicators_no_mask/natural_habitats_status_extent_change_2005.tif")
-percent_change_2005_raster_final_layers_mask_path<- file.path("/home/shares/wwri-wildfire/final_layers/", as.character(output_index_year), "natural_habitats/indicators_mask/natural_habitats_status_extent_change_2005.tif")
+percent_change_2005_raster_final_layers_path <- file.path(wri_project_root, "final_layers", as.character(output_index_year), "natural_habitats", "indicators_no_mask", "natural_habitats_status_extent_change_2005.tif")
+percent_change_2005_raster_final_layers_mask_path<- file.path(wri_project_root, "final_layers", as.character(output_index_year), "natural_habitats", "indicators_mask", "natural_habitats_status_extent_change_2005.tif")
 percent_change_2015_raster_path <- file.path(natural_habitats_path, "sensitivity_testing/natural_habitats_status_extent_change_2015.tif")
 
 # ecoregion shapefiles
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 ecoregion_intersection_path <- file.path(multi_domain_data_file_path, 
                                          "int/boundary_layers/epa_ecoregions_north_america_level_iii/intersecting_ecoregion_shapes/ecoregions_intersecting_study_area.shp")

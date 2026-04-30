@@ -102,4 +102,4 @@ Processes US ACS and Canadian Census homeownership rates at census-tract / CSD l
 ---
 
 ## Output
-Final raster layers are written to `/home/shares/wwri-wildfire/final_layers/2024/infrastructure/`.
+Final raster layers are written under **`{WRI_PROJECT_ROOT}/final_layers/<year>/infrastructure/`** (see the repository root [README](../README.md) for configuring `WRI_PROJECT_ROOT`).

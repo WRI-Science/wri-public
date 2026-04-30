@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(sf) 
 library(tidyverse) 
 library(here)
@@ -22,11 +24,11 @@ library(here) # To assemble file paths within project
 
 #### Base directories ####
 # MAKE SURE TO CHANGE DOMAIN PATH NAME ACCORDINGLY
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_places"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_places/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_places/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/sense_of_place/iconic_places"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_places")
+raw_data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_places", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_places", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "sense_of_place", "iconic_places")
 
 #### Boundary layers ####
 study_area_admin1_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")) %>% 

@@ -1,11 +1,13 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Load Packages ####
 library(tidyverse)
 library(sf)
 library(purrr)
 
 #### Setup and File Paths ####
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
-multi_domain_data_base_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
+multi_domain_data_base_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 intersecting_ecoregions_path <- paste0(
   multi_domain_data_base_path,

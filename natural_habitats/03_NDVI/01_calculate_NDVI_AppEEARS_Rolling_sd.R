@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to process the raw NDVI data from NASA AppEEARS. 
 # Here, we calculate the rolling standard deviation of the NDVI data for our study region
@@ -19,11 +21,11 @@ library(doSNOW)     # Alternative backend with progress support
 #### Paths and Variables ####
 year_of_interest <- "2024"
 
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
 raw_NDVI_path <- paste0(natural_habitats_base_path, "raw/NDVI/", year_of_interest, "_AppEEARS/NDVI/")
 output_path <- paste0(natural_habitats_base_path, "int/NDVI/", year_of_interest, "/rolling_sd/")
 
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 study_area_shape_path <- paste0(multi_domain_data_file_path, "/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp")
 
 num_cores <- 12  

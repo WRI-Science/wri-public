@@ -1,3 +1,7 @@
+import os
+
+WRI_PROJECT_ROOT = os.environ.get("WRI_PROJECT_ROOT", "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to generate three masks per ecoregion raster—in Mollweide projection—for:
 #   1. Agriculture & Urban (classes 5 & 7)
@@ -21,7 +25,7 @@ from tqdm import tqdm
 year = 2023
 
 # Base directory for all natural ecosystems data
-data_root = "/home/shares/wwri-wildfire/data/natural_habitats/"
+data_root = os.path.join(WRI_PROJECT_ROOT, "data", "natural_habitats")
 
 # Directory containing ecoregion-masked rasters in Mollweide projection
 ecoregion_rast_dir = os.path.join(

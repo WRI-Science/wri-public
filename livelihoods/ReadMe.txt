@@ -1,10 +1,10 @@
 
-Western Wildfire Resilience Index (WWRI) - Livelihoods Domain
+Wildfire Resilience Index (WRI) — Livelihoods Domain
 ============================================================
 
 Overview:
 ---------
-The Livelihoods Domain of the Western Wildfire Resilience Index (WWRI) is designed to measure both the current status of the livelihoods and the resilience of those livelihoods to a wildfire event within an administrative area.
+The Livelihoods Domain of the Wildfire Resilience Index (WRI) is designed to measure both the current status of the livelihoods and the resilience of those livelihoods to a wildfire event within an administrative area.
 
 Model:
 ------

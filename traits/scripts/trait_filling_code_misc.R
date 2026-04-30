@@ -1,4 +1,6 @@
-# Code to fill in species traits for WWRI 
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
+# Code to fill in species traits for WRI 
 
 # Set Up -----------------------------------------------------------------------
 
@@ -9,7 +11,7 @@ library(janitor)
 
 # set working directory 
 
-setwd("/home/shares/wwri-wildfire/data/multi-domain-data/traits")
+setwd(file.path(wri_project_root, "data", "multi-domain-data", "traits"))
 
 ## load data --------------------------------------------------------------
 

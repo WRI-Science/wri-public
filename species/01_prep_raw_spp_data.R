@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(sf) # For working with spatial (vector/shapefile) data
 library(tidyverse) # For data manipulation
 library(here) # For sourcing the functions script cleanly later
@@ -9,7 +11,7 @@ library(here) # For sourcing the functions script cleanly later
 
 
 #### Base directories ####
-data_file_path <- "/home/shares/wwri-wildfire/data/biodiversity"
+data_file_path <- file.path(wri_project_root, "data", "biodiversity")
 path_year <- "2024" # Update this if needed for the year of the data
 raw_data_file_path <- file.path(data_file_path, "raw", path_year)
 int_data_file_path <- file.path(data_file_path, "int", path_year)

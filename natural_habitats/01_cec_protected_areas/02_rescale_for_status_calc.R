@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # the goal of this script is to rescale the perent protected calculation from 
 # step 1 to be between 0-1 depending on the IUCN category we want to include up to.
@@ -6,8 +8,8 @@
 library(tidyverse)
 
 #### Setup and File Paths ####
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
-multi_domain_data_base_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
+multi_domain_data_base_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 ecoregion_protection_summary_path <- paste0(
   natural_habitats_base_path,

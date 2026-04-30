@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to calculate what percent trees makeup each building
 # footprint for 10 meters. This will be done by subtracting the building footprint 
@@ -13,9 +15,9 @@ library(sf)
 #### File Paths and Setup ####
 year_of_interest <- 2024
 # Set base directories
-infrastructure_file_path <- "/home/shares/wwri-wildfire/data/infrastructure"
-final_layers_file_path <- paste0("/home/shares/wwri-wildfire/final_layers/", as.character(year_of_interest), "/infrastructure/")
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+infrastructure_file_path <- file.path(wri_project_root, "data", "infrastructure")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", as.character(year_of_interest), "infrastructure")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 # Template raster path for alignment function
 template_raster_path <- file.path(multi_domain_data_file_path, 
@@ -33,7 +35,7 @@ rescaled_save_path <- file.path(infrastructure_file_path, "rescaled_indicators/"
 final_save_path <- file.path(final_layers_file_path, "indicators/infrastructure_resistance_d_space.tif")
 
 # mask for human settlement layer
-human_settlement_layer_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/int/human_settlement/human_sett_aligned.tif"
+human_settlement_layer_path <- file.path(wri_project_root, "data", "multi_domain_data", "int", "human_settlement", "human_sett_aligned.tif")
 
 source(here::here("templates_and_functions", "align_raster_to_template.R"))
 

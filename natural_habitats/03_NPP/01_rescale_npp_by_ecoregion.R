@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(sf) # For reading and manipulating spatial data
 library(tidyverse) # For data manipulation
 library(terra) # For raster processing
@@ -11,9 +13,9 @@ library(here) # To assemble file paths within project
 
 #### Base Directories ####
 
-multi_domain_data_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/natural_habitats"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/natural_habitats"
+multi_domain_data_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "natural_habitats")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "natural_habitats")
 
 # Set up equal area crs for rescaling by ecoregion
 moll_crs <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m"
@@ -136,4 +138,4 @@ npp_rescaled_raster_aligned <- align_raster_to_template(study_area_rast, npp_res
 plot(npp_rescaled_raster_aligned, main = "NPP Rescaled by Ecoregion") # Looks good
 
 # Write out rescaled raster
-writeRaster(npp_rescaled_raster_aligned, "/home/shares/wwri-wildfire/final_layers/2024/natural_habitats/indicators/natural_habitats_resistance_npp.tif", overwrite = TRUE)
+writeRaster(npp_rescaled_raster_aligned, file.path(wri_project_root, "final_layers", "2024", "natural_habitats", "indicators", "natural_habitats_resistance_npp.tif"), overwrite = TRUE)

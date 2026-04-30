@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(sf) # For working with spatial (vector/shapefile) data
 library(tidyverse) # For data manipulation
 library(here) # For sourcing the functions script cleanly later
@@ -12,7 +14,7 @@ sf::sf_use_s2(FALSE) # Turn it off entirely in case shapes are invalid with it o
 
 
 #### Base Directories ####
-data_file_path <- "/home/shares/wwri-wildfire/data/biodiversity"
+data_file_path <- file.path(wri_project_root, "data", "biodiversity")
 path_year <- "2024"
 int_data_file_path <- file.path(data_file_path, "int", path_year)
 output_path_prev <- file.path(int_data_file_path, "species_dfs_status") # output_path from previous steps of status processing

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal #### 
 # the goal of this script is to take the annual precipication files and make 
 # the 30 year stack, dataframe, and summary statistics we will use for rescaling.
@@ -11,7 +13,7 @@ library(terra)
 # use 1991-2020 for the 30 year stack
 process_years <- 1991:2020
 
-natural_habitats_root <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+natural_habitats_root <- file.path(wri_project_root, "data", "natural_habitats")
 annual_ppt_path <- paste0(natural_habitats_root, "int/terraclimate/ppt_annual_sums/")
 ppt_1991_2020_path <- paste0(natural_habitats_root, "int/terraclimate/ppt_1991_2020/")
 
@@ -30,7 +32,7 @@ if (file.exists(paste0(ppt_1991_2020_path, "ppt_1991_2020_summary_stats.csv"))) 
 # get ppt files
 files <- file.path(annual_ppt_path, sprintf("ppt_annual_%d.tif", process_years))
 
-multi_domain_root <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+multi_domain_root <- file.path(wri_project_root, "data", "multi_domain_data")
 study_region_shape_path <- paste0(multi_domain_root, "/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp")
 
 # template raster

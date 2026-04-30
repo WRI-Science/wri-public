@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ###
 # The goal of this script is to rescale the VPD data from TerraClimate to 0-1
 # based on the biome specific thresholds.
@@ -15,10 +17,10 @@ library(here)
 #### File paths and Setup ####
 year <- 2024
 
-natural_habitats_root <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+natural_habitats_root <- file.path(wri_project_root, "data", "natural_habitats")
 raw_vpd_path <- paste0(natural_habitats_root, "raw/terraclimate/vpd/TerraClimate_vpd_", year, ".nc")
 
-multi_domain_root <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+multi_domain_root <- file.path(wri_project_root, "data", "multi_domain_data")
 study_region_shape_path <- paste0(multi_domain_root, "/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp")
 wwf_ecoregion_path <- paste0(natural_habitats_root, "raw/wwf_ecoregions/shapefiles/wwf_terr_ecos.shp")
 
@@ -38,7 +40,7 @@ if (!file.exists(ag_urban_mask_path)) {
 # save paths
 rescaled_save_path <- paste0(natural_habitats_root, "rescaled_indicators/", year, "/")
 
-final_layer_root <- "/home/shares/wwri-wildfire/final_layers/"
+final_layer_root <- file.path(wri_project_root, "final_layers")
 final_layer_save_path_no_mask <- paste0(final_layer_root, year, "/natural_habitats/indicators_no_mask/")
 final_layer_save_path_mask <- paste0(final_layer_root, year, "/natural_habitats/indicators_mask/")
 

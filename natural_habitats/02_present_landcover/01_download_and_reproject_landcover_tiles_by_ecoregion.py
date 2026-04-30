@@ -1,3 +1,7 @@
+import os
+
+WRI_PROJECT_ROOT = os.environ.get("WRI_PROJECT_ROOT", "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to download all of the landcover tiles that 
 # intersect with our study area ecoregions. Once downloaded the tiles will be 
@@ -29,12 +33,12 @@ from tqdm import tqdm   # progress bars
 year = 2023 #2023 is the most recent data as of 5/15/2025
 
 # base directories
-base_dir = "/home/shares/wwri-wildfire/data/natural_habitats/"
+base_dir = os.path.join(WRI_PROJECT_ROOT, "data", "natural_habitats")
 raw_dir = os.path.join(base_dir, "raw/esri_present_landcover", str(year))
 reprojected_dir = os.path.join(base_dir, "int/esri_present_landcover", str(year), "reprojected_raw_tiles")
 
 # ecoregion intersection shapefile
-multi_domain_data_path = "/home/shares/wwri-wildfire/data/multi_domain_data"
+multi_domain_data_path = os.path.join(WRI_PROJECT_ROOT, "data", "multi_domain_data")
 ecoregion_shapefile = os.path.join(
     multi_domain_data_path,
     "int/epa_ecoregions_north_america_level_iii/intersecting_ecoregion_shapes/ecoregions_intersecting_study_area.shp"

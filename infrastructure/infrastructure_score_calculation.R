@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # Goal of this script
 # The goal of this script is to calculate the resistance, recovery, resilience, status, and domain scores for the infrastructure domain.
 # This will use the processed 90 m indicator rasters created throughout the other scripts in this domain.
@@ -9,9 +11,9 @@ library(here)
 library(dplyr)
 
 # Set base directories
-data_file_path <- "/home/shares/wwri-wildfire/data/infrastructure"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+data_file_path <- file.path(wri_project_root, "data", "infrastructure")
+final_layers_file_path <- file.path(wri_project_root, "final_layers")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 #### Boundary layers ####
 study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"))
@@ -22,7 +24,7 @@ source(here("templates_and_functions", "align_raster_to_template.R"))
 #### Indicators ####
 
 # Status
-human_settlement_layer <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/human_settlement/human_sett_aligned.tif")
+human_settlement_layer <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "human_settlement", "human_sett_aligned.tif"))
 
 # Resistance
 building_codes <- rast(file.path(final_layers_file_path, "2024/infrastructure/indicators/infrastructure_resistance_building_codes.tif"))
@@ -32,9 +34,9 @@ wildland_urban_interface <- rast(file.path(final_layers_file_path, "2024/infrast
 defensible_space <- rast(file.path(final_layers_file_path, "2024/infrastructure/indicators/infrastructure_resistance_d_space.tif"))
 
 # Recovery
-homeowners <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_recovery_owners.tif")
-median_income <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/indicators/livelihoods_status_median_income.tif")
-incorporation <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_recovery_incorporation.tif")
+homeowners <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_recovery_owners.tif"))
+median_income <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "indicators", "livelihoods_status_median_income.tif"))
+incorporation <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_recovery_incorporation.tif"))
 
 #### Calculate Status ####
 
@@ -107,8 +109,8 @@ writeRaster(recovery,
             overwrite = TRUE)
 
 #### Calculate Resilience ####
-resistance <- rast("/home/shares/wwri-wildfire/final_layers/2024/infrastructure/infrastructure_resistance.tif")
-#recovery <- rast("/home/shares/wwri-wildfire/final_layers/2024/infrastructure/infrastructure_recovery.tif")
+resistance <- rast(file.path(wri_project_root, "final_layers", "2024", "infrastructure", "infrastructure_resistance.tif"))
+#recovery <- rast(file.path(wri_project_root, "final_layers", "2024", "infrastructure", "infrastructure_recovery.tif"))
 
 # Resilience is calculated as 1 - (1 - Resistance) * (1 - Recovery)
 calc_resilience <- function(resistance, recovery) {
@@ -163,7 +165,7 @@ writeRaster(domain_score,
 plot(domain_score, main = "Infrastructure Domain Score")
 plot(resilience, main = "Infrastructure Resilience")
 
-domain_score <- rast("/home/shares/wwri-wildfire/final_layers/2024/infrastructure/infrastructure_domain_score.tif")
+domain_score <- rast(file.path(wri_project_root, "final_layers", "2024", "infrastructure", "infrastructure_domain_score.tif"))
 
 plot(domain_score == 100)
 

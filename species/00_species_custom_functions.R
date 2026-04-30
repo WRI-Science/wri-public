@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # This script contains functions for the species domain: 
 # valid_check(): Ensures and makes all shapefiles valid, and records if any still cannot be made valid so that they can be fixed manually
 # prepare_iucn(): Fixes column names for IUCN data
@@ -206,8 +208,8 @@ process_species_for_status_or_resilience <- function(iucn_shps_filtered, version
       source(here("biodiversity", "00_biodiversity_custom_functions.R"))
       
       # Set base paths
-      multi_domain_data_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-      data_file_path <- "/home/shares/wwri-wildfire/data/biodiversity"
+      multi_domain_data_path <- file.path(wri_project_root, "data", "multi_domain_data")
+      data_file_path <- file.path(wri_project_root, "data", "biodiversity")
       path_year <- "2024" # Set the year for the data file path
       int_data_file_path <- file.path(data_file_path, "int", path_year)
       

@@ -1,13 +1,15 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(terra)
 library(sf)
 library(tidyverse)
 
 # Check 1: No positive differences
-places_status <- rast("/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_places/sense_of_place_iconic_places_status.tif")
-places_resistance <- rast("/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_places/sense_of_place_iconic_places_resistance.tif")
-places_recovery <- rast("/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_places/sense_of_place_iconic_places_recovery.tif")
-places <- rast("/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_places/sense_of_place_iconic_places_domain_score_mean.tif")
-states_vect <- vect("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")
+places_status <- rast(file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_places", "sense_of_place_iconic_places_status.tif"))
+places_resistance <- rast(file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_places", "sense_of_place_iconic_places_resistance.tif"))
+places_recovery <- rast(file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_places", "sense_of_place_iconic_places_recovery.tif"))
+places <- rast(file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_places", "sense_of_place_iconic_places_domain_score_mean.tif"))
+states_vect <- vect(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_1.shp"))
 
 # do calc like this because places status is a mask and we are using masked versions:
 places_dif <- places_resistance - places # [resistance-(resistance & recovery)] 
@@ -20,7 +22,7 @@ places_dif
 
 # Check 2: Min/Max raster values
 # get a list of all the tif files in the final_layers folder
-final_layers_path <- "/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_places/"
+final_layers_path <- file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_places")
 
 # make the list of tif files
 tif_files <- list.files(final_layers_path, pattern = "\\.tif$", full.names = TRUE)

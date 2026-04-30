@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # Load the necessary libraries
 library(natserv)
 library(tibble)
@@ -8,11 +10,11 @@ library(readr)
 library(stringr)
 
 # Set base directories
-data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_species"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_species/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/sense_of_place/iconic_species/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/sense_of_place/iconic_species"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_species")
+raw_data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_species", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "sense_of_place", "iconic_species", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "sense_of_place", "iconic_species")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 #### Data Layers ####
 iconic_species_list <- read_csv(file.path(raw_data_file_path, "iconic_species_list - Sheet1 (16).csv"))
@@ -242,7 +244,7 @@ wwri_iconic_species_filtered_cleaned_seperate_scores <- wwri_iconic_species_filt
     fill = "right" # Fill missing values with NA
   )
 
-#### Create NS status WWRI scoring chart ####
+#### Create NS status WRI scoring chart ####
 
 # Extend the NatureServe mapping table with S (subnational) and N (national) ranks and G (Global) rounded rank
 conservation_rank_mapping <- c(
@@ -273,7 +275,7 @@ conservation_rank_mapping <- c(
 )
 
 
-#### Attach numerical WWRI score to NS letter score ####
+#### Attach numerical WRI score to NS letter score ####
 
 # Combine assignments for Sscore and Nscore and roundedGscore in a single pipeline
 wwri_iconic_species_threat_scores <- wwri_iconic_species_filtered_cleaned_seperate_scores %>%

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyhydat)
 library(tidyverse)
 library(sf)
@@ -23,7 +25,7 @@ monthly_data_w_station_info <- left_join(monthly_data, all_stations, by = "stati
   drop_na(value)
 
 # write out unfiltered dataset
-write_csv(monthly_data_w_station_info, "/home/shares/wwri-wildfire/data/water/int/canadian-streamflow-data-full_2024.csv")
+write_csv(monthly_data_w_station_info, file.path(wri_project_root, "data", "water", "int", "canadian-streamflow-data-full_2024.csv"))
 
 
 
@@ -90,7 +92,7 @@ canada_stream_data_filtered <- monthly_data_w_station_info_filtered %>%
 
 
 # write out data for use elsewhere
-write_csv(canada_stream_data_filtered, "/home/shares/wwri-wildfire/data/water/int/canadian-streamflow-data-30-yr-and-recent_2024.csv")
+write_csv(canada_stream_data_filtered, file.path(wri_project_root, "data", "water", "int", "canadian-streamflow-data-30-yr-and-recent_2024.csv"))
 
 
 
@@ -100,17 +102,17 @@ write_csv(canada_stream_data_filtered, "/home/shares/wwri-wildfire/data/water/in
 # to ensure we do not double count
 
 # get US data of interest
-hcdn_2009_designations_conus <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/raw/GAGES_II_Geospa/basinchar_and_report_sept_2011/spreadsheets-in-csv-format/conterm_basinid.txt") %>%
+hcdn_2009_designations_conus <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "raw", "GAGES_II_Geospa", "basinchar_and_report_sept_2011", "spreadsheets-in-csv-format", "conterm_basinid.txt")) %>%
   filter(!is.na(`HCDN-2009`)) %>%
   select(STAID, LAT_GAGE, LNG_GAGE)
 
-hcdn_2009_designations_ak <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/raw/GAGES_II_Geospa/basinchar_and_report_sept_2011/spreadsheets-in-csv-format/AKHIPR_basinid.txt") %>%
+hcdn_2009_designations_ak <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "raw", "GAGES_II_Geospa", "basinchar_and_report_sept_2011", "spreadsheets-in-csv-format", "AKHIPR_basinid.txt")) %>%
   filter(!is.na(`HCDN-2009`)) %>%
   select(STAID, LAT_GAGE, LNG_GAGE)
 
 all_hcdn_2009_sites <- rbind(hcdn_2009_designations_conus, hcdn_2009_designations_ak)
 
-nwis_data <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/int/study-area-usgs-nwis-data-with-coords-new-source-entire-us.csv")
+nwis_data <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "int", "study-area-usgs-nwis-data-with-coords-new-source-entire-us.csv"))
 nwis_data_hcdn_2009 <- nwis_data %>%
   filter(site_no %in% c(all_hcdn_2009_sites$STAID))
 length(unique(nwis_data_hcdn_2009$site_no)) # 717

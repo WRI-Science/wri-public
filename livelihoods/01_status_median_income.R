@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 ## Median Income
 # The US reports median income as USD at the household level for each census tract.
 # Canada reports median income as CAD at the household level for each census subdivision.
@@ -16,10 +18,10 @@ library(terra)
 
 #### Base directories ####
 # MAKE SURE TO CHANGE DOMAIN PATH NAME ACCORDINGLY
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/livelihoods/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/livelihoods/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/livelihoods"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+raw_data_file_path <- file.path(wri_project_root, "data", "livelihoods", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "livelihoods", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "livelihoods")
 
 #### Boundary layers ####
 canada_census_subdivisions <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/canada_census_subdivisions/canada_census_subdivisions.shp"))  %>% 
@@ -28,7 +30,7 @@ us_tract <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/
   st_transform(5070) 
 study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"))
 
-human_settlement_layer <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/global_human_settlement_layer/human_sett_aligned.tif")
+human_settlement_layer <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "global_human_settlement_layer", "human_sett_aligned.tif"))
 
 #### Functions ####
 source(here("templates_and_functions", "align_raster_to_template.R"))

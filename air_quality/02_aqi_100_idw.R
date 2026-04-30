@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # Combine U.S. and Canadian 2024 station counts of days with AQI > 100,
 # perform inverse‐distance‐weighted interpolation onto a 5 km Mollweide grid,
@@ -21,11 +23,11 @@ library(progressr)
 library(here)
 
 #### Base directories ####
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/air_quality"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/air_quality/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/air_quality/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/air_quality"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "air_quality")
+raw_data_file_path <- file.path(wri_project_root, "data", "air_quality", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "air_quality", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "air_quality")
 
 #### Boundary layers ####
 study_area_admin_0_expanded_eastward_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0_expanded_eastward.shp"))
@@ -106,7 +108,7 @@ sf::st_write(
   quiet = FALSE
 )
 
-#### Load WWRI Study Area county level shapefiles ####
+#### Load WRI study area county-level shapefiles ####
 
 # load in 5km grid so it doesn't have to be remade 
 country_grid <- sf::st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/study_area_grid_expanded_east_moll_5km.gpkg"))

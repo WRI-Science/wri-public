@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # The purpose of this script is to download and prepare all American Community Survey (US Census data) variables at the tract and county level (county level used for gapfilling tracts). 
 # This includes variables: age 65+, disability, no vehicle, renter-occupied housing units, poverty, and households earning 200k+ annually (the last two getting combined later to form the income indicator). The first three variables are used in the SVI (CDC Social Vulnerability Index) and the last three are used in the SoVI (University of South Carolina Social Vulnerability Index). This informed our decision to use them, but we chose our final variables based on relation to wildfire resilience as well.
 # The output will be a csv file with all variables of interest for the study area states, which will later be combined with Canada's equivalents (if available) and then rasterized to 90 m.
@@ -57,7 +59,7 @@ sum(is.na(us_acs_variables_people$estimate))
 # sum(is.na(test$estimate))
 
 # for use in combining script
-st_write(us_acs_variables_people, "/home/shares/wwri-wildfire/data/communities/raw/2024/acs/us_acs_2019_2023_variables_communities.gpkg")
+st_write(us_acs_variables_people, file.path(wri_project_root, "data", "communities", "raw", "2024", "acs", "us_acs_2019_2023_variables_communities.gpkg"))
 
 
 # clean the tract data
@@ -88,7 +90,7 @@ us_acs_variables_people_gf <- map_df(interested_states, ~get_acs(geography = "co
   rename(geo_id = GEOID)
 
 # saving to ensure we have the data
-st_write(us_acs_variables_people_gf, "/home/shares/wwri-wildfire/data/communities/raw/2024/acs/us_acs_2019_2023_variables_people_gf.gpkg")
+st_write(us_acs_variables_people_gf, file.path(wri_project_root, "data", "communities", "raw", "2024", "acs", "us_acs_2019_2023_variables_people_gf.gpkg"))
 
 sum(is.na(us_acs_variables_people_gf$estimate))
 # [1] 342
@@ -146,7 +148,7 @@ us_acs_variables_people_full <- us_acs_variables_people_cleaned %>%
 #   select(-poverty, -renter, -age_65_plus, -disability, -no_vehicle)
 
 # write the US tract ACS data out
-write_csv(us_acs_variables_people_full, "/home/shares/wwri-wildfire/data/communities/int/2024/acs/us_acs_2019_2023_variables_communities_full.gpkg") # write out correct direction instead?
+write_csv(us_acs_variables_people_full, file.path(wri_project_root, "data", "communities", "int", "2024", "acs", "us_acs_2019_2023_variables_communities_full.gpkg")) # write out correct direction instead?
 # this can just be a csv, there's no spatial info
 
 
@@ -248,13 +250,13 @@ write_csv(us_acs_variables_people_full, "/home/shares/wwri-wildfire/data/communi
 # }
 # 
 # # write out my rasters
-# write_rasters(acs_data_poverty_rast, "/home/shares/wwri-wildfire/domains/sense-of-place/people/acs_poverty_data_rast")
-# write_rasters(acs_data_renter_rast, "/home/shares/wwri-wildfire/domains/sense-of-place/people/acs_renter_data_rast")
-# write_rasters(acs_data_greater_than_200k_rast, "/home/shares/wwri-wildfire/domains/sense-of-place/people/acs_data_greater_than_200k_rast")
-# write_rasters(acs_data_age_65_plus_rast, "/home/shares/wwri-wildfire/domains/sense-of-place/people/acs_data_age_65_plus_rast")
-# write_rasters(acs_data_disability_rast, "/home/shares/wwri-wildfire/domains/sense-of-place/people/acs_data_disability_rast")
-# write_rasters(acs_data_no_vehicle_rast, "/home/shares/wwri-wildfire/domains/sense-of-place/people/acs_data_no_vehicle_rast")
-# write_rasters(acs_data_population_rast, "/home/shares/wwri-wildfire/domains/sense-of-place/people/acs_data_population_rast")
+# write_rasters(acs_data_poverty_rast, file.path(wri_project_root, "domains", "sense-of-place", "people", "acs_poverty_data_rast"))
+# write_rasters(acs_data_renter_rast, file.path(wri_project_root, "domains", "sense-of-place", "people", "acs_renter_data_rast"))
+# write_rasters(acs_data_greater_than_200k_rast, file.path(wri_project_root, "domains", "sense-of-place", "people", "acs_data_greater_than_200k_rast"))
+# write_rasters(acs_data_age_65_plus_rast, file.path(wri_project_root, "domains", "sense-of-place", "people", "acs_data_age_65_plus_rast"))
+# write_rasters(acs_data_disability_rast, file.path(wri_project_root, "domains", "sense-of-place", "people", "acs_data_disability_rast"))
+# write_rasters(acs_data_no_vehicle_rast, file.path(wri_project_root, "domains", "sense-of-place", "people", "acs_data_no_vehicle_rast"))
+# write_rasters(acs_data_population_rast, file.path(wri_project_root, "domains", "sense-of-place", "people", "acs_data_population_rast"))
 
 
 

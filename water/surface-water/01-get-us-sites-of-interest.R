@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse)
 
 # between 1991-2020, have at least 20 years that have 12 months
@@ -5,9 +7,9 @@ library(tidyverse)
 # add nwis pulling code here? instead of separate script?
 
 # site filtering
-us_stream_data <- read_csv("/home/shares/wwri-wildfire/data/water/int/study-area-usgs-nwis-data-with-coords-new-source-entire-us_2024.csv") %>%
+us_stream_data <- read_csv(file.path(wri_project_root, "data", "water", "int", "study-area-usgs-nwis-data-with-coords-new-source-entire-us_2024.csv")) %>%
   filter(parameter_cd == "00060")
-# all_hcdn_2009_sites <- read_csv("/home/shares/wwri-wildfire/data/water/int/all_hcdn_2009_sites.csv")
+# all_hcdn_2009_sites <- read_csv(file.path(wri_project_root, "data", "water", "int", "all_hcdn_2009_sites.csv"))
 
 # us_stream_hcdn_2009 <- us_stream_data %>%
 #   filter(site_no %in% c(all_hcdn_2009_sites$STAID)) #%>%
@@ -58,4 +60,4 @@ us_stream_data_filtered <- us_stream_data %>%
   
 
 # write out data for use elsewhere
-write_csv(us_stream_data_filtered, "/home/shares/wwri-wildfire/data/water/int/us-streamflow-data-30-yr-and-recent_2024.csv")
+write_csv(us_stream_data_filtered, file.path(wri_project_root, "data", "water", "int", "us-streamflow-data-30-yr-and-recent_2024.csv"))

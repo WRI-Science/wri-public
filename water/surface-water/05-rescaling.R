@@ -1,16 +1,18 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse)
 library(terra)
 library(sf)
 
 # read in data of interest
 # canada
-canada_stream_data <- read_csv("/home/shares/wwri-wildfire/data/water/int/canadian-streamflow-data-30-yr-and-recent_2024.csv") %>% 
+canada_stream_data <- read_csv(file.path(wri_project_root, "data", "water", "int", "canadian-streamflow-data-30-yr-and-recent_2024.csv")) %>% 
   #filter(sum_stat == "MEAN") %>%
   #mutate(value_us_units = value * 35.3147) %>%
   select(site_no = station_number, flow = value_us_units, year, month, full_year)
 
 # us
-us_stream_data <- read_csv("/home/shares/wwri-wildfire/data/water/int/us-streamflow-data-30-yr-and-recent_2024.csv") %>%
+us_stream_data <- read_csv(file.path(wri_project_root, "data", "water", "int", "us-streamflow-data-30-yr-and-recent_2024.csv")) %>%
   #filter(parameter_cd == "00060") %>%
   select(site_no, flow = mean_va, year = year_nu, month = month_nu, full_year)
 
@@ -113,7 +115,7 @@ final_scores <- quantity_scores %>%
   left_join(timing_scores %>% select(site_no, timing_score), by = "site_no")
 
 # read in hydrobasins lvl 8s in study area with site assignments
-lvl8_hydrobasins_w_sites <- read_csv("/home/shares/wwri-wildfire/data/water/int/hydrobasins_lvl8_filled_w_sites_study_area_only_2024.csv")
+lvl8_hydrobasins_w_sites <- read_csv(file.path(wri_project_root, "data", "water", "int", "hydrobasins_lvl8_filled_w_sites_study_area_only_2024.csv"))
 
 # join final scores to hydrobasins
 final_scores_hydrobasins <- lvl8_hydrobasins_w_sites %>%
@@ -127,7 +129,7 @@ final_scores_hydrobasins <- lvl8_hydrobasins_w_sites %>%
   )
 
 # add in geometries
-hydrobasins_lev8 <- st_read("/home/shares/wwri-wildfire/data/water/int/hydrobasins_lev8_2024.gpkg") %>% 
+hydrobasins_lev8 <- st_read(file.path(wri_project_root, "data", "water", "int", "hydrobasins_lev8_2024.gpkg")) %>% 
   select(id_lev08, geom)
 final_scores_hydrobasins <- hydrobasins_lev8 %>%
   right_join(final_scores_hydrobasins, by = "id_lev08") %>%
@@ -139,13 +141,13 @@ st_geometry(final_scores_hydrobasins) <- st_geometry(hydrobasins_lev8)[match(fin
 # do we need to rescale 0 to 1 too? technically the data is already like that. i think no
 
 # intersect with vector study area
-study_area <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp")
+study_area <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_0.shp"))
 final_scores_hydrobasins_intersected <- final_scores_hydrobasins %>%
   st_intersection(., study_area)
 
 
 # read in study area raster to rasterize to
-study_area_rast <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif")
+study_area_rast <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"))
 
 # rasterize status score to 90 m (100 m until new mask is made)
 streams_rast <- terra::rasterize(final_scores_hydrobasins_intersected,
@@ -159,7 +161,7 @@ plot(streams_rast,
      main = "Streamflow Status Scores")
 
 # write raster
-writeRaster(streams_rast, "/home/shares/wwri-wildfire/final_layers/2024/water/indicators/streamflow_status_scores_2024.tif", overwrite = TRUE)
+writeRaster(streams_rast, file.path(wri_project_root, "final_layers", "2024", "water", "indicators", "streamflow_status_scores_2024.tif"), overwrite = TRUE)
 
 
 

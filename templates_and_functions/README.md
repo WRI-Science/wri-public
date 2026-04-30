@@ -8,6 +8,11 @@ This folder contains shared R and Python utilities used across multiple WRI doma
 
 ## Contents
 
+### `wri_paths.R`
+Defines `wri_project_root` from the environment variable `WRI_PROJECT_ROOT`, falling back to the historical team server layout when unset. Helpers `wri_data(...)` and `wri_final_layers(...)` build paths under `{root}/data/` and `{root}/final_layers/`.
+
+Scripts may source this file (often via `here::here("templates_and_functions", "wri_paths.R")`) or set `wri_project_root` inline with the same `Sys.getenv` pattern — see the root **README** section *Configuring data paths*.
+
 ### `align_raster_to_template.R`
 The most widely used utility in the entire codebase. Defines a function that reprojects, resamples, and crops any input raster to match the 90 m EPSG:5070 study area template raster. All final indicator layers must pass through this function before being used in score calculations.
 

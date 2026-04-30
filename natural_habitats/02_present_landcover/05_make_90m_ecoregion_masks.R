@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 
 # The goal of this is script is to take the 10m raster data made in step 5 and make them into 90m rasters.
@@ -21,14 +23,14 @@ terraOptions(threads = 2)           # keep 2 threads per worker
 terraOptions(memfrac = 0.6)         # use up to 60% RAM per process
 options(terra.mem.limit = 8000)     # MB
 
-data_root    <- "/home/shares/wwri-wildfire/data/natural_habitats"
+data_root    <- file.path(wri_project_root, "data", "natural_habitats")
 present_landcover_path <- file.path(data_root,
                                     "int/esri_present_landcover",
                                     as.character(year))
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 template_raster_path <- file.path(
-  "/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/",
+  file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers"),
   "admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"
 )
 template_raster <- rast(template_raster_path)

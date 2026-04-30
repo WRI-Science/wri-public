@@ -10,7 +10,7 @@
 
 ## Overview
 
-This repository contains the code used to generate the 2024 snapshot of the Western Wildfire Resilience Index (WRI) — the first open-access, holistic tool to measure wildfire resilience across communities in the western United States and Canada.
+This repository contains the code used to generate the 2024 snapshot of the Wildfire Resilience Index (WRI) — the first open-access, holistic tool to measure wildfire resilience across communities in the western United States and Canada.
 
 The WRI is modeled after the Ocean Health Index and calculates scores across 8 domains for communities throughout 12 western US states plus British Columbia and Yukon. Scores reflect status, resistance, and recovery dimensions of wildfire resilience.
 
@@ -94,7 +94,7 @@ The final score is the mean of the drought plan and water treatment indicators.
 
 ## Shared utilities
 
-- **`templates_and_functions/`** — Shared R utilities used across all domains: `align_raster_to_template.R` (reprojects/resamples any raster to the 90 m study area grid), `score_calculation_template.R` (standard formulas for status, resistance, recovery, resilience, and domain scores), and `base_script_template.R` (blank starting template for new indicator scripts).
+- **`templates_and_functions/`** — Shared R utilities used across all domains: `wri_paths.R` (project root via `WRI_PROJECT_ROOT`), `align_raster_to_template.R` (reprojects/resamples any raster to the 90 m study area grid), `score_calculation_template.R` (standard formulas for status, resistance, recovery, resilience, and domain scores), and `base_script_template.R` (blank starting template for new indicator scripts).
 - **`traits/`** — Compiles and gap-fills fire-relevant biological trait data (bark thickness, serotiny, resprouting, seed dispersal, shade tolerance) for trees and vertebrates. Sources include TRY, BIEN, BBBdb, AmphiBIO, and FishBase. Outputs feed into both the Natural Habitats and Species domain pipelines.
 
 ---
@@ -117,9 +117,26 @@ The input data for this analysis exceeds 10 terabytes and will be made available
 
 ---
 
+## Configuring data paths
+
+Analysis scripts expect a single **project root** directory that contains at least:
+
+- `data/` — domain inputs and intermediates (for example `data/air_quality/`, `data/multi_domain_data/`).
+- `final_layers/` — processed indicators and scores (for example `final_layers/2024/air_quality/`).
+
+Set the environment variable **`WRI_PROJECT_ROOT`** to that directory. If it is not set, scripts default to the historical internal path `/home/shares/wwri-wildfire` so existing deployments keep working without changes.
+
+Copy [`.Renviron.example`](.Renviron.example) to `.Renviron` in the repo root (see also [.gitignore](.gitignore); `.Renviron` is ignored by git) or export `WRI_PROJECT_ROOT` in your shell before running R or Python.
+
+Optional shared helpers live in [`templates_and_functions/wri_paths.R`](templates_and_functions/wri_paths.R).
+
+Some notebooks use older folder spellings under `data/` (for example `multi-domain-data` with hyphens) while many R scripts use underscores (`multi_domain_data`). Keep the same relative structure as on your storage machine, or use symlinks so both layouts resolve.
+
+---
+
 ## Citation
 
-If you use this work, please cite this project — either by linking back to this repository or by acknowledging the Western Wildfire Resilience Index in your references. Structured citation metadata for GitHub’s “Cite this repository” button is in [`CITATION.cff`](CITATION.cff).
+If you use this work, please cite this project — either by linking back to this repository or by acknowledging the Wildfire Resilience Index in your references. Structured citation metadata for GitHub’s “Cite this repository” button is in [`CITATION.cff`](CITATION.cff).
 
 ---
 

@@ -1,7 +1,9 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse)
 
-nwis_data <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/int/study-area-usgs-nwis-data-with-coords-new-source-with-buffer.csv")
-old_nwis_data <- read_csv("/home/shares/wwri-wildfire/data/water-domain-data/int/study-area-usgs-nwis-data-with-coords.csv")
+nwis_data <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "int", "study-area-usgs-nwis-data-with-coords-new-source-with-buffer.csv"))
+old_nwis_data <- read_csv(file.path(wri_project_root, "data", "water-domain-data", "int", "study-area-usgs-nwis-data-with-coords.csv"))
 length(unique(nwis_data$site_no))
 sorted_years <- sort(unique(nwis_data$year_nu), decreasing = TRUE)
 print(sorted_years)

@@ -45,5 +45,6 @@ Supplemental trait filling for non-tree species (amphibians, fish, and other ver
 ---
 
 ## Notes
+- Set **`WRI_PROJECT_ROOT`** so that `file.path(wri_project_root, "data", "multi-domain-data", "traits")` resolves to your traits working directory (see the repository root [README](../README.md)). The scripts call `setwd()` into that folder because downstream paths are expressed relative to `data/spp_lists`, etc.
 - This code is upstream of the Natural Habitats and Species domain pipelines. Outputs feed into `natural_habitats/01_treemap/04_rescale_treemap_tree_traits.R` and `species/03_prep_resilience/04_prep_traits_data.R`.
 - Trait gap-filling is intentionally conservative: only fills when a clear taxonomic match exists; unfilled values are left as NA rather than imputed with global means.

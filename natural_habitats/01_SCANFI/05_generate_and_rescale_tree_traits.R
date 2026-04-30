@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to generate the SCANFI tree trait data and then to
 # rescale it based on ecoregions. Once this is output is generated it can be 
@@ -17,8 +19,8 @@ library(pbapply)
 #### Setup and File Paths ####
 redo_all <- FALSE # set to TRUE to redo all steps
 
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 scanfi_tree_trait_path <- paste0(natural_habitats_base_path, "int/tree_traits/tree_sp_can_95_for_scanfi.csv")
 

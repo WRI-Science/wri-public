@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #The goal of this script is to extract the historical landcover data downloaded 
 # and get only the layers we need. Once we have those layers they need to be combined 
 # and set up for our study region.
@@ -11,8 +13,8 @@ library(future)
 library(future.apply)  # for parallel processing
 
 # File paths
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data")
 raw_data_file_path <- file.path(data_file_path, "natural_habitats/raw/")
 historical_landcover_raw_data_file_path <- file.path(raw_data_file_path, "historical_landcover")
 int_data_file_path <- file.path(data_file_path, "natural_habitats/int/")

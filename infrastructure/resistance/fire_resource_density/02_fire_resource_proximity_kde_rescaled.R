@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # Load required library
 library(sf)
 library(terra)
@@ -15,11 +17,11 @@ library(gridExtra)
 
 #### Base directories ####
 # MAKE SURE TO CHANGE DOMAIN PATH NAME ACCORDINGLY
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/infrastructure"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/infrastructure/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/infrastructure/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/infrastructure"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "infrastructure")
+raw_data_file_path <- file.path(wri_project_root, "data", "infrastructure", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "infrastructure", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "infrastructure")
 
 #### Boundary layers ####
 study_area_admin1_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")) 
@@ -44,7 +46,7 @@ bc_fire_stations_5070 <- st_read(file.path(raw_data_file_path, "fire_stations/20
   st_transform(5070) %>% 
   filter(RESP_GRP == "FIRE")
 
-yt_fire_stations_5070 <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/yukon_fire_resources/yukon_fire_departments.shp") %>% 
+yt_fire_stations_5070 <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "yukon_fire_resources", "yukon_fire_departments.shp")) %>% 
   st_transform(5070)
 
 

@@ -1,10 +1,12 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(readxl)
 
 # went to cat's link then back one then advanced search
 
-test <- read_excel("/home/shares/wwri-wildfire/data/water-domain-data/raw/epa/2024/q4/Water System Summary_20250311-9.xlsx", skip = 4) # tried to repeat the Cat link
-test2 <- read_excel("/home/shares/wwri-wildfire/data/water-domain-data/raw/epa/2024/q4/Water System Summary_20250311-8.xlsx", skip = 4) # used advanced search like all other time
-test3 <- read_excel("/home/shares/wwri-wildfire/data/water-domain-data/raw/epa/2024/q4/Water System Summary_20250227.xlsx", skip = 4) # downloaded at link Cat sent
+test <- read_excel(file.path(wri_project_root, "data", "water-domain-data", "raw", "epa", "2024", "q4", "Water System Summary_20250311-9.xlsx"), skip = 4) # tried to repeat the Cat link
+test2 <- read_excel(file.path(wri_project_root, "data", "water-domain-data", "raw", "epa", "2024", "q4", "Water System Summary_20250311-8.xlsx"), skip = 4) # used advanced search like all other time
+test3 <- read_excel(file.path(wri_project_root, "data", "water-domain-data", "raw", "epa", "2024", "q4", "Water System Summary_20250227.xlsx"), skip = 4) # downloaded at link Cat sent
                                                                
 colnames(test)
  # [1] "PWS ID"                     "PWS Name"                  

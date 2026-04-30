@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # Code for filling in plant traits 
 # Trees and Iconic Species
 # trait summary 
@@ -12,7 +14,7 @@ library(rgbif)
 
 # set working directory 
 
-setwd("/home/shares/wwri-wildfire/data/multi-domain-data/traits")
+setwd(file.path(wri_project_root, "data", "multi-domain-data", "traits"))
 
 ## load data --------------------------------------------------------------
 

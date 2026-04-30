@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to generate ecoregion assignments for the treemap data.
 # The output will be a csv with the xy coordinate and the ecoregion assignment 
@@ -26,7 +28,7 @@ chunk_size  <- 2000000
 pct_to_process <- 1 
 
 # file paths:
-multi_domain_data_path = "/home/shares/wwri-wildfire/data/multi_domain_data/"
+multi_domain_data_path = file.path(wri_project_root, "data", "multi_domain_data")
 raw_treemap_data_base = paste0(multi_domain_data_path, "raw/treemap/from_publication_zip/Data/")
 template_raster_path    <- paste0(raw_treemap_data_base, "TreeMap2016.tif")
 

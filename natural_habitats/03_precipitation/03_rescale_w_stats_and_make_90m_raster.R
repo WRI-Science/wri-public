@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal #### 
 # The goal of this script is to take the annual data and compare it to the 
 # 30-year data to rescale it for the resistance layer. This produces the final 
@@ -12,11 +14,11 @@ library(tidyverse)
 ### File Paths and Setup ####
 year_of_interest <- 2024
 
-natural_habitats_root <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+natural_habitats_root <- file.path(wri_project_root, "data", "natural_habitats")
 annual_ppt_path <- paste0(natural_habitats_root, "int/terraclimate/ppt_annual_sums/")
 ppt_annual_raster_path <- paste0(annual_ppt_path, "ppt_annual_", year_of_interest, ".tif")
 
-multi_domain_root <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
+multi_domain_root <- file.path(wri_project_root, "data", "multi_domain_data")
 study_region_shape_path <- paste0(multi_domain_root, "/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp")
 summary_stats_path <- paste0(natural_habitats_root, "int/terraclimate/ppt_1991_2020/ppt_1991_2020_summary_stats.csv")
 
@@ -37,7 +39,7 @@ if (!file.exists(ag_urban_mask_path)) {
 # save paths
 rescaled_save_path <- paste0(natural_habitats_root, "rescaled_indicators/", year_of_interest, "/")
 
-final_layer_root <- "/home/shares/wwri-wildfire/final_layers/"
+final_layer_root <- file.path(wri_project_root, "final_layers")
 final_layer_save_path_no_mask <- paste0(final_layer_root, year_of_interest, "/natural_habitats/indicators_no_mask/")
 final_layer_save_path_mask <- paste0(final_layer_root, year_of_interest, "/natural_habitats/indicators_mask/")
 

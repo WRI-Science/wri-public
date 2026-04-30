@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 ## Housing Burden
 # The US reports their housing statistics by rent burdened housing units burden for 
 # each housing tenure (mortgage status) this is then combined and divided by total 
@@ -18,10 +20,10 @@ library(terra)
 
 #### Base directories ####
 # MAKE SURE TO CHANGE DOMAIN PATH NAME ACCORDINGLY
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/livelihoods/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/livelihoods/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/livelihoods"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+raw_data_file_path <- file.path(wri_project_root, "data", "livelihoods", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "livelihoods", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "livelihoods")
 
 #### Boundary layers ####
 canada_census_subdivisions <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/canada_census_subdivisions/canada_census_subdivisions.shp"))  %>% 
@@ -30,7 +32,7 @@ us_tract <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/
   st_transform(5070) 
 study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"))
 
-human_settlement_layer <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/human_settlement/human_sett_aligned.tif")
+human_settlement_layer <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "human_settlement", "human_sett_aligned.tif"))
 
 #### Functions ####
 source(here("templates_and_functions", "align_raster_to_template.R"))

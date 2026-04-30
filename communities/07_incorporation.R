@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(sf)
 library(tidyverse)
 library(tidycensus)
@@ -7,10 +9,10 @@ library(here) # To assemble file paths within project
 source(here("templates_and_functions", "align_raster_to_template.R"))
 
 census_api_key <- Sys.getenv('CENSUS_API_KEY')
-study_area_raster <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif") # study area raster to rasterize to
+study_area_raster <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_90m_with_na.tif")) # study area raster to rasterize to
 
 
-incorporation_data_folder_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/raw/boundary_layers/us_census_designated_places/2024"
+incorporation_data_folder_path <- file.path(wri_project_root, "data", "multi_domain_data", "raw", "boundary_layers", "us_census_designated_places", "2024")
 incorporation_data_shapefile_paths <- list.files(incorporation_data_folder_path, pattern = "\\.shp$", full.names = TRUE, recursive = TRUE)
 incorporation_data_shapefile <- lapply(incorporation_data_shapefile_paths, st_read) %>%
   bind_rows()
@@ -71,8 +73,8 @@ incorporated_types <- c("RGM", "CY", "DM", "VL", "T")
 # RGM – Regional Municipality
 # DM – District Municipality ?
 
-# csd_data_bc <- read_csv("/home/shares/wwri-wildfire/data/sense-of-place-domain-data/canada-incorporated-places/CSD_bc.csv")
-# csd_data_yk <- read_csv("/home/shares/wwri-wildfire/data/sense-of-place-domain-data/canada-incorporated-places/CSD_yk.csv")
+# csd_data_bc <- read_csv(file.path(wri_project_root, "data", "sense-of-place-domain-data", "canada-incorporated-places", "CSD_bc.csv"))
+# csd_data_yk <- read_csv(file.path(wri_project_root, "data", "sense-of-place-domain-data", "canada-incorporated-places", "CSD_yk.csv"))
 # csd_data_combined <- rbind(csd_data_bc, csd_data_yk)
 
 # csd_data_combined_names <- csd_data_combined %>%
@@ -134,11 +136,11 @@ combined_incorporation_raster_aligned <- align_raster_to_template(study_area_ras
 plot(combined_incorporation_raster_aligned)
 
 # write out the full raster
-writeRaster(combined_incorporation_raster_aligned, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_recovery_incorporation.tif", overwrite = TRUE) # this is currently in 5070
+writeRaster(combined_incorporation_raster_aligned, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_recovery_incorporation.tif"), overwrite = TRUE) # this is currently in 5070
 
 # combined_incorporation_raster_4269 <- combined_incorporation_raster %>%
 #   project(x = ., y = "EPSG:4269")
-# writeRaster(combined_incorporation_raster_4269, "/home/shares/wwri-wildfire/domains/sense-of-place/people/incorporation_4269.tif", overwrite = TRUE)
+# writeRaster(combined_incorporation_raster_4269, file.path(wri_project_root, "domains", "sense-of-place", "people", "incorporation_4269.tif"), overwrite = TRUE)
 
 
 

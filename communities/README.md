@@ -48,4 +48,4 @@ Scores are computed at 90 m resolution across the WRI study area (12 western US 
 ---
 
 ## Output
-Final raster layers are written to `/home/shares/wwri-wildfire/final_layers/2024/communities/`.
+Final raster layers are written under **`{WRI_PROJECT_ROOT}/final_layers/<year>/communities/`** (see the repository root [README](../README.md) for configuring `WRI_PROJECT_ROOT`).

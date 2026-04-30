@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse)
 library(sf)
 library(cancensus)
@@ -5,13 +7,13 @@ library(terra)
 library(here) # To assemble file paths within project
 # Source functions
 source(here("templates_and_functions", "align_raster_to_template.R"))
-study_area_rast <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif") # study area raster to rasterize to
+study_area_rast <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_90m_with_na.tif")) # study area raster to rasterize to
 
 # combine US and Canada census data
-can_census_variables_communities_full <- read_csv("/home/shares/wwri-wildfire/data/communities/int/2024/canada_census/can_census_variables_communities_full.csv")
-us_acs_variables_communities_full <- read_csv("/home/shares/wwri-wildfire/data/communities/int/2024/acs/us_acs_2019_2023_variables_communities_full.gpkg")
+can_census_variables_communities_full <- read_csv(file.path(wri_project_root, "data", "communities", "int", "2024", "canada_census", "can_census_variables_communities_full.csv"))
+us_acs_variables_communities_full <- read_csv(file.path(wri_project_root, "data", "communities", "int", "2024", "acs", "us_acs_2019_2023_variables_communities_full.gpkg"))
 census_variables_communities_full <- rbind(can_census_variables_communities_full, us_acs_variables_communities_full)
-write_csv(census_variables_communities_full, "/home/shares/wwri-wildfire/data/communities/int/2024/census_variables_communities_full.csv")
+write_csv(census_variables_communities_full, file.path(wri_project_root, "data", "communities", "int", "2024", "census_variables_communities_full.csv"))
 # ensure no duplicate geo ids between countries
 # > length(unique(census_variables_communities_full$geo_id))
 # [1] 19131
@@ -28,7 +30,7 @@ census_variables_communities_full_correct_direction <- census_variables_communit
   ) %>%
   select(-poverty, -age_65_plus, -disability, -no_vehicle)
 
-write_csv(census_variables_communities_full_correct_direction, "/home/shares/wwri-wildfire/data/communities/int/2024/census_variables_communities_full_correct_direction.csv")
+write_csv(census_variables_communities_full_correct_direction, file.path(wri_project_root, "data", "communities", "int", "2024", "census_variables_communities_full_correct_direction.csv"))
 
 # add back in the spatial data
 # clean the tract data for only spatial info
@@ -42,7 +44,7 @@ can_subdivs_spatial_only <- get_census(dataset = 'CA21',
   distinct() %>% # may not be needed, but just in case
   st_transform(5070) 
 
-us_acs_variables_communities <- st_read("/home/shares/wwri-wildfire/data/communities/raw/2024/acs/us_acs_2019_2023_variables_communities.gpkg")
+us_acs_variables_communities <- st_read(file.path(wri_project_root, "data", "communities", "raw", "2024", "acs", "us_acs_2019_2023_variables_communities.gpkg"))
 us_acs_variables_communities_cleaned_spatial_only <- us_acs_variables_communities %>%
   select(-NAME, -moe) %>%
   filter(variable == "S0101_C01_001") %>%
@@ -53,8 +55,8 @@ us_acs_variables_communities_cleaned_spatial_only <- us_acs_variables_communitie
 census_spatial_info <- rbind(can_subdivs_spatial_only, us_acs_variables_communities_cleaned_spatial_only)
 
 # our two sources for census spatial info differ so need to add in that spatial info
-us_census_spatial_alt <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/us_census_tract/us_census_tracts.shp") %>% select(geo_id = GEOID)
-can_census_spatial_alt <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/canada_census_subdivisions/canada_census_subdivisions.shp") %>% select(geo_id = CSDUID)
+us_census_spatial_alt <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "us_census_tract", "us_census_tracts.shp")) %>% select(geo_id = GEOID)
+can_census_spatial_alt <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "canada_census_subdivisions", "canada_census_subdivisions.shp")) %>% select(geo_id = CSDUID)
   
 spatial_alt_full <- rbind(us_census_spatial_alt, can_census_spatial_alt)
 
@@ -172,11 +174,11 @@ write_rasters <- function(raster_obj, base_filename, template_raster, input_type
 
 
 # write out my rasters
-#write_rasters(poverty_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_recovery_poverty", study_area_rast)
-write_rasters(owner_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_recovery_owners", study_area_rast)
-#write_rasters(greater_than_200k_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_recovery_greater_than_200k", study_area_rast)
-write_rasters(age_65_plus_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_resistance_age_65_plus", study_area_rast)
-write_rasters(disability_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_resistance_disability", study_area_rast)
-write_rasters(no_vehicle_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_resistance_no_vehicle", study_area_rast)
-write_rasters(income_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/communities_recovery_income", study_area_rast)
-# write_rasters(population_rast, "/home/shares/wwri-wildfire/domains/sense-of-place/communities/population_rast")
+#write_rasters(poverty_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_recovery_poverty"), study_area_rast)
+write_rasters(owner_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_recovery_owners"), study_area_rast)
+#write_rasters(greater_than_200k_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_recovery_greater_than_200k"), study_area_rast)
+write_rasters(age_65_plus_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_resistance_age_65_plus"), study_area_rast)
+write_rasters(disability_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_resistance_disability"), study_area_rast)
+write_rasters(no_vehicle_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_resistance_no_vehicle"), study_area_rast)
+write_rasters(income_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "communities_recovery_income"), study_area_rast)
+# write_rasters(population_rast, file.path(wri_project_root, "domains", "sense-of-place", "communities", "population_rast"))

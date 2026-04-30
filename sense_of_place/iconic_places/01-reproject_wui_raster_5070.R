@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # Load required libraries
 library(sf)
 library(terra)
@@ -15,7 +17,7 @@ library(future.apply)
 library(future)
 
 # Set base directory
-base_dir <- "/home/shares/wwri-wildfire"
+base_dir <- file.path(wri_project_root)
 
 # Load and transform study area shape
 study_area_admin1_shape <- st_read(file.path(base_dir, "data/multi-domain-data/boundary-layers/processed/admin-boundary-layers/wwri_study_area_admin_1.shp")) %>% 

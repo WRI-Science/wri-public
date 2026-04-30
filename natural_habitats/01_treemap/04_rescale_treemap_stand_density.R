@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # the goal of this script is to recale the treemap stand density data and 
 # prepare it to be mosaiced with the scanfi data. Run script 1-3 before this. 
@@ -14,10 +16,10 @@ library(arrow)
 redo_all <- TRUE # set to TRUE to redo all steps
 rescale_method <- "median"
 
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
-multi_domain_data_file_path = "/home/shares/wwri-wildfire/data/multi_domain_data/"
+multi_domain_data_file_path = file.path(wri_project_root, "data", "multi_domain_data")
 raw_treemap_data_base = paste0(multi_domain_data_file_path, "raw/treemap/from_publication_zip/Data/")
 treemap_template_raster_path <- paste0(raw_treemap_data_base, "TreeMap2016.tif")
 

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # script for cleaning and calculating NCFH total farm workers and H-2A Temp farm workers
 # To fill in for US NAICS codes 111 and 112 lack of data on agricultural workers 
 
@@ -20,11 +22,11 @@ library(tidyr)
 library(tibble)
 
 #### Base directories ####
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/air_quality"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/air_quality/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/air_quality/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/air_quality"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "air_quality")
+raw_data_file_path <- file.path(wri_project_root, "data", "air_quality", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "air_quality", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "air_quality")
 
 #### Boundary layers ####
 study_area_admin2_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_2.shp")) %>% 

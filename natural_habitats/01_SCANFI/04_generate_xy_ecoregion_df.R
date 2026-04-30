@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # with current parameters this takes about 2.5 hours to complete
 
 # -------------------------------
@@ -20,15 +22,15 @@ chunk_size  <- 1000000
 pct_to_process <- 1 
 
 # file paths:
-template_raster_path    <- "/home/shares/wwri-wildfire/data/natural_habitats/raw/scanfi/SCANFI_att_closure_SW_2020_v1.2.tif"
-merged_csv_path         <- "/home/shares/wwri-wildfire/data/natural_habitats/int/scanfi/scanfi_merged_closure_all_species.csv"
-ecoregion_shapes_path   <- "/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/epa_ecoregions_north_america_level_iii/intersecting_ecoregion_shapes/ecoregions_intersecting_study_area.shp"
+template_raster_path    <- file.path(wri_project_root, "data", "natural_habitats", "raw", "scanfi", "SCANFI_att_closure_SW_2020_v1.2.tif")
+merged_csv_path         <- file.path(wri_project_root, "data", "natural_habitats", "int", "scanfi", "scanfi_merged_closure_all_species.csv")
+ecoregion_shapes_path   <- file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "epa_ecoregions_north_america_level_iii", "intersecting_ecoregion_shapes", "ecoregions_intersecting_study_area.shp")
 
 # Where to write each chunk’s “(rowID, x,y, NA_L3KEY)” output:
-chunk_output_dir <- "/home/shares/wwri-wildfire/data/natural_habitats/int/scanfi/iter_chunks_for_ecoregions/"
+chunk_output_dir <- file.path(wri_project_root, "data", "natural_habitats", "int", "scanfi", "iter_chunks_for_ecoregions")
 
 # (Optional) If you want a final single file, you can pick this path later:
-final_output_csv <- "/home/shares/wwri-wildfire/data/natural_habitats/int/scanfi/scanfi_xy_with_ecoregion.csv"
+final_output_csv <- file.path(wri_project_root, "data", "natural_habitats", "int", "scanfi", "scanfi_xy_with_ecoregion.csv")
 
 # Create output folder if it doesn’t exist
 if (!dir.exists(chunk_output_dir)) {

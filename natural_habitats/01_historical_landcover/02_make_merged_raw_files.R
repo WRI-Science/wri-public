@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to merge the historical landcover tiles that were seperated from the rest of the raw files in step 1.
 # Once merged they will be saved and then cropped to our study area and have the ecoregion analysis conducted.
@@ -7,8 +9,8 @@ library(terra)
 library(sf)  # For system calls
 
 #### File Paths ####
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data")
 raw_data_file_path <- file.path(data_file_path, "natural_habitats/raw/")
 int_data_file_path <- file.path(data_file_path, "natural_habitats/int/")
 historical_landcover_int_data_file_path <- file.path(int_data_file_path, "historical_landcover")

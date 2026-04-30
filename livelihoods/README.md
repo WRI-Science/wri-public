@@ -38,4 +38,4 @@ Data are sourced from the US Census Bureau and Statistics Canada, harmonized acr
 ---
 
 ## Output
-Final raster layers are written to `/home/shares/wwri-wildfire/final_layers/2024/livelihoods/`.
+Final raster layers are written under **`{WRI_PROJECT_ROOT}/final_layers/<year>/livelihoods/`** (see the repository root [README](../README.md) for configuring `WRI_PROJECT_ROOT`).

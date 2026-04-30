@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(readxl) # For reading Excel files cleanly
 library(tidyverse) # For data manipulation
 library(sf) # For spatial data operations
@@ -11,9 +13,9 @@ library(here) # To assemble file paths within project
 
 
 #### Base Directories ####
-data_file_path <- "/home/shares/wwri-wildfire/data/water" # Base directory for water
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers"
-multi_domain_data_path <- "/home/shares/wwri-wildfire/data/multi_domain_data" # Base directory for multi-domain data
+data_file_path <- file.path(wri_project_root, "data", "water") # Base directory for water
+final_layers_file_path <- file.path(wri_project_root, "final_layers")
+multi_domain_data_path <- file.path(wri_project_root, "data", "multi_domain_data") # Base directory for multi-domain data
 path_year <- "2024" # Update this if needed for the year of the data
 raw_data_file_path <- file.path(data_file_path, "raw", path_year) # Directory for raw data
 final_layers_output_path <- file.path(final_layers_file_path, path_year, "water") # output path for final layers
@@ -175,4 +177,4 @@ water_treatment_rast <- align_raster_to_template(study_area_rast, water_treatmen
 plot(water_treatment_rast, main = "Water Treatment Scores 2024")
 
 # Write out raster to indicators folder
-writeRaster(water_treatment_rast, "/home/shares/wwri-wildfire/final_layers/2024/water/indicators/water_resistance_water_treatment.tif", overwrite = TRUE)
+writeRaster(water_treatment_rast, file.path(wri_project_root, "final_layers", "2024", "water", "indicators", "water_resistance_water_treatment.tif"), overwrite = TRUE)

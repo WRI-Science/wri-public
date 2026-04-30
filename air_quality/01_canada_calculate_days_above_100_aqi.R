@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # script to clean and calculate the daily BC and YT AQI from the AirNow individual pollutant 2024 .csv files
 # first part of the script converts the hourly AQI values for SO2 and NO2 to daily max values
@@ -20,11 +22,11 @@ library(here)
 library(tidyr)
 
 #### Base directories ####
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/air_quality"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/air_quality/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/air_quality/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/air_quality"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "air_quality")
+raw_data_file_path <- file.path(wri_project_root, "data", "air_quality", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "air_quality", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "air_quality")
 
 #### Boundary layers ####
 study_area_admin1_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")) %>% 

@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(terra) # For raster operations
 library(sf) # For spatial operations
 library(foreach) # For parallel processing
@@ -13,8 +15,8 @@ library(doParallel) # For parallel processing
 
 
 #### Base Directories ####
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers"
-multi_domain_data_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+final_layers_file_path <- file.path(wri_project_root, "final_layers")
+multi_domain_data_path <- file.path(wri_project_root, "data", "multi_domain_data")
 path_year <- "2024"
 final_layers_output_path <- file.path(final_layers_file_path, path_year, "biodiversity") # output path for final layers
 final_layers_checks_output_path <- file.path(final_layers_output_path, "final_checks") # output path for final checks
@@ -76,8 +78,8 @@ registerDoParallel(cl)
 results <- foreach(i = 1:length(states_vect), .packages = c("terra", "sf")) %dopar% {
   # Read in necessary data in the parallel environment
   #### Base Directories ####
-  final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers"
-  multi_domain_data_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+  final_layers_file_path <- file.path(wri_project_root, "final_layers")
+  multi_domain_data_path <- file.path(wri_project_root, "data", "multi_domain_data")
   path_year <- "2024"
   final_layers_output_path <- file.path(final_layers_file_path, path_year, "biodiversity") # output path for final layers
   final_layers_checks_output_path <- file.path(final_layers_output_path, "final_checks") # output path for final checks

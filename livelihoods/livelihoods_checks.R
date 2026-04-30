@@ -1,13 +1,15 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(terra)
 library(sf)
 library(tidyverse)
 
 # Check 1: No positive differences
-livelihoods_status <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_status.tif")
-livelihoods_resistance <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_resistance.tif")
-livelihoods_recovery <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_recovery.tif")
-livelihoods <- rast("/home/shares/wwri-wildfire/final_layers/2024/livelihoods/livelihoods_domain_score_mean.tif")
-states_vect <- vect("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")
+livelihoods_status <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_status.tif"))
+livelihoods_resistance <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_resistance.tif"))
+livelihoods_recovery <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_recovery.tif"))
+livelihoods <- rast(file.path(wri_project_root, "final_layers", "2024", "livelihoods", "livelihoods_domain_score_mean.tif"))
+states_vect <- vect(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_1.shp"))
 
 livelihoods_resistance_only <- mean(c(livelihoods_status, livelihoods_resistance), na.rm = TRUE)
 livelihoods_dif <- livelihoods_resistance_only - livelihoods # [resistance-(resistance & recovery)] 
@@ -17,7 +19,7 @@ livelihoods_dif
 
 # Check 2: Min/Max raster values
 # get a list of all the tif files in the final_layers folder
-final_layers_path <- "/home/shares/wwri-wildfire/final_layers/2024/livelihoods/"
+final_layers_path <- file.path(wri_project_root, "final_layers", "2024", "livelihoods")
 
 # make the list of tif files
 tif_files <- list.files(final_layers_path, pattern = "\\.tif$", full.names = TRUE)

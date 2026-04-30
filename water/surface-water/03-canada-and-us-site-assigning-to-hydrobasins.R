@@ -1,11 +1,13 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse)
 library(sf)
 
 # set base dir
-base_dir <- "/home/shares/wwri-wildfire"
+base_dir <- file.path(wri_project_root)
 
 # read in canada data
-canada_stream_data <- read_csv("/home/shares/wwri-wildfire/data/water/int/canadian-streamflow-data-30-yr-and-recent_2024.csv") %>%
+canada_stream_data <- read_csv(file.path(wri_project_root, "data", "water", "int", "canadian-streamflow-data-30-yr-and-recent_2024.csv")) %>%
   drop_na(value_us_units)
 
 canada_stream_sites <- canada_stream_data %>%
@@ -13,7 +15,7 @@ canada_stream_sites <- canada_stream_data %>%
   distinct()
 
 # read in us data
-us_stream_data <- read_csv("/home/shares/wwri-wildfire/data/water/int/us-streamflow-data-30-yr-and-recent_2024.csv")
+us_stream_data <- read_csv(file.path(wri_project_root, "data", "water", "int", "us-streamflow-data-30-yr-and-recent_2024.csv"))
 
 us_stream_sites <- us_stream_data %>%
   select(site_no, lat = dec_lat_va, lon = dec_long_va) %>% # grab site number, latitude, and longitude for geocoding later
@@ -59,7 +61,7 @@ for (level in 1:8) {
 }
 
 # write out hydrobasin lvl 8 geometries processed for later
-st_write(hydrobasins_lev8, "/home/shares/wwri-wildfire/data/water/int/hydrobasins_lev8_2024.gpkg", append = FALSE)
+st_write(hydrobasins_lev8, file.path(wri_project_root, "data", "water", "int", "hydrobasins_lev8_2024.gpkg"), append = FALSE)
 
 # 
 # # use code from Mona's scripts to get hydrobasins
@@ -91,7 +93,7 @@ all_sites_with_hydrobasins <- st_join(all_sites_sf, hydrobasins_lev8, left = TRU
 table(all_sites_with_hydrobasins$id_lev08)
 nrow(all_sites_with_hydrobasins %>%
        filter(!is.na(id_lev08))) # all sites got assigned a hydrobasin
-st_write(all_sites_with_hydrobasins, "/home/shares/wwri-wildfire/data/water/int/sites_with_hydrobasins_lvl_8_2024.gpkg", append = FALSE)
+st_write(all_sites_with_hydrobasins, file.path(wri_project_root, "data", "water", "int", "sites_with_hydrobasins_lvl_8_2024.gpkg"), append = FALSE)
 
 
 # go through levels 8 to 1 to perform a spatial join with sites
@@ -136,7 +138,7 @@ for (level in 2:8) {
   print(paste("Merged level", level))
 }
 
-write_csv(sites_with_hydrobasins_all_levels, "/home/shares/wwri-wildfire/data/water/int/sites_with_hydrobasins_all_levels_2024.csv")
+write_csv(sites_with_hydrobasins_all_levels, file.path(wri_project_root, "data", "water", "int", "sites_with_hydrobasins_all_levels_2024.csv"))
 
 length(unique(sites_with_hydrobasins_all_levels$id_lev08))
 
@@ -404,13 +406,13 @@ all_filled_hybas_8_site_counts <- all_filled_hybas_8 %>%
 all_filled_hybas_8_w_geom <- all_filled_hybas_8 %>%
   left_join(hydrobasins_lev8, by = "id_lev08")
 
-write_csv(all_filled_hybas_8, "/home/shares/wwri-wildfire/data/water/int/hydrobasins_lvl8_filled_w_sites_2024.csv")
+write_csv(all_filled_hybas_8, file.path(wri_project_root, "data", "water", "int", "hydrobasins_lvl8_filled_w_sites_2024.csv"))
 
 # add geometry information back to filled hydrobasin lvl 8s
 filled_hybas_8_geom <- left_join(hydrobasins_lev8, all_filled_hybas_8, by = "id_lev08")
 
 # ensure only geometries that touch our study area are kept
-study_area <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0.shp") %>%
+study_area <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_0.shp")) %>%
   st_transform(., "EPSG:5070")
 
 filled_hybas_8_geom_study_area <- st_filter(filled_hybas_8_geom, study_area, .predicate = st_intersects)
@@ -423,7 +425,7 @@ filled_hybas_8_no_geom_study_area <- filled_hybas_8_geom_study_area %>%
 #   select(id_lev08) %>%
 #   distinct()
 
-write_csv(filled_hybas_8_no_geom_study_area, "/home/shares/wwri-wildfire/data/water/int/hydrobasins_lvl8_filled_w_sites_study_area_only_2024.csv")
+write_csv(filled_hybas_8_no_geom_study_area, file.path(wri_project_root, "data", "water", "int", "hydrobasins_lvl8_filled_w_sites_study_area_only_2024.csv"))
 
 # double check that the included hydrobasins look correct
 # get only one copy of each geometry and add the study area layered on top

@@ -71,4 +71,4 @@ Uses EPA Safe Drinking Water Information System (SDWIS) violation records to sco
 ---
 
 ## Output
-Final raster layers are written to `/home/shares/wwri-wildfire/final_layers/2024/water/`.
+Final raster layers are written under **`{WRI_PROJECT_ROOT}/final_layers/<year>/water/`** (see the repository root [README](../README.md) for configuring `WRI_PROJECT_ROOT`).

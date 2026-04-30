@@ -1,13 +1,15 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(terra)
 library(sf)
 library(foreach)
 library(doParallel)
 
 # Check 1: No positive differences
-communities_status <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/communities_status_masked.tif")
-communities_resistance <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/communities_resistance_masked.tif")
-communities_recovery <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/communities_recovery_masked.tif")
-communities <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/communities_domain_score_masked.tif")
+communities_status <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "communities_status_masked.tif"))
+communities_resistance <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "communities_resistance_masked.tif"))
+communities_recovery <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "communities_recovery_masked.tif"))
+communities <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "communities_domain_score_masked.tif"))
 
 # domain score stack
 #communities_stack <- c(communities_status, communities_resistance)
@@ -16,7 +18,7 @@ communities <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/co
 communities_dif <- communities_resistance - communities # [resistance-(resistance & recovery)] 
 plot(communities_dif)
 writeRaster(communities_dif, 
-            "/home/shares/wwri-wildfire/final_layers/2024/communities/communities_dif.tif", 
+            file.path(wri_project_root, "final_layers", "2024", "communities", "communities_dif.tif"), 
             overwrite=TRUE)
 # SHOULD BE NO POSITIVES
 # Write this out if you want to run it in background
@@ -44,15 +46,15 @@ classify_na_type <- function(v) {
   else                    return(7)
 }
 
-states_vect <- vect("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")
+states_vect <- vect(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_1.shp"))
 
 # Parallel loop
 results <- foreach(i = 1:length(states_vect), .packages = c("terra", "sf")) %dopar% {
   # Read in necessary data in the parallel environment
-  states_vect <- vect("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_1.shp")
-  communities_status <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/communities_status_masked.tif")
-  communities_resistance <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/communities_resistance_masked.tif")
-  communities_recovery <- rast("/home/shares/wwri-wildfire/final_layers/2024/communities/communities_recovery_masked.tif")
+  states_vect <- vect(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_1.shp"))
+  communities_status <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "communities_status_masked.tif"))
+  communities_resistance <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "communities_resistance_masked.tif"))
+  communities_recovery <- rast(file.path(wri_project_root, "final_layers", "2024", "communities", "communities_recovery_masked.tif"))
   
   # Stack the layers of interest
   communities_stack <- c(communities_status, communities_resistance, communities_recovery)
@@ -69,7 +71,7 @@ results <- foreach(i = 1:length(states_vect), .packages = c("terra", "sf")) %dop
   classified <- app(masked, classify_na_type)
   
   # Write output raster for the state
-  out_path <- paste0("/home/shares/wwri-wildfire/final_layers/2024/communities/communities_classified_", state_name, ".tif")
+  out_path <- file.path(wri_project_root, "final_layers", "2024", "communities", paste0("communities_classified_", state_name, ".tif"))
   writeRaster(classified, out_path, overwrite=TRUE)
   
   return(out_path)
@@ -78,7 +80,7 @@ results <- foreach(i = 1:length(states_vect), .packages = c("terra", "sf")) %dop
 stopCluster(cl)
 
 # Folder where files were saved
-out_folder <- "/home/shares/wwri-wildfire/final_layers/2024/communities/"
+out_folder <- file.path(wri_project_root, "final_layers", "2024", "communities")
 
 # List all chunk files
 chunk_files <- list.files(out_folder, pattern = "^communities_classified_.*\\.tif$", full.names = TRUE)

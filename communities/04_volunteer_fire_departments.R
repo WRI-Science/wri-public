@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse)
 library(tidycensus)
 library(pdftools)
@@ -9,17 +11,17 @@ library(here) # To assemble file paths within project
 # Source functions
 source(here("templates_and_functions", "align_raster_to_template.R"))
 census_api_key <- Sys.getenv('CENSUS_API_KEY') # retrieve key stored in Renv file
-study_area_lvl_2 <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_2.shp") # for the vector shapes for the data
-study_area_raster <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif") # study area raster to rasterize to
-study_area_raster_moll <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na_moll.tif") # study area raster because we use nearest feature and want spacing to be equal (distance calc)
-study_area_vect <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_0_moll.shp")
+study_area_lvl_2 <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_2.shp")) # for the vector shapes for the data
+study_area_raster <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_90m_with_na.tif")) # study area raster to rasterize to
+study_area_raster_moll <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_90m_with_na_moll.tif")) # study area raster because we use nearest feature and want spacing to be equal (distance calc)
+study_area_vect <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_0_moll.shp"))
 
 # US
 # read in US fire department data: https://apps.usfa.fema.gov/registry/download
-us_fire_depts <- read_csv("/home/shares/wwri-wildfire/data/communities/us_fire_departments/usfa-registry-national.csv") %>%
+us_fire_depts <- read_csv(file.path(wri_project_root, "data", "communities", "us_fire_departments", "usfa-registry-national.csv")) %>%
   janitor::clean_names()
 
-us_fire_stations <- read_csv("/home/shares/wwri-wildfire/data/communities/us_fire_departments/usfa-registry-station.csv") %>%
+us_fire_stations <- read_csv(file.path(wri_project_root, "data", "communities", "us_fire_departments", "usfa-registry-station.csv")) %>%
   janitor::clean_names() %>%
   select(fdid, fire_dept_name, hq_state, county, station_name, dept_type)
 # > unique(us_fire_stations$dept_type)
@@ -142,7 +144,7 @@ plot(us_fire_stations_clean_w_geo_ids)
 
 # get BC fire data
 # https://catalogue.data.gov.bc.ca/dataset/first-responders
-bc_fire_stations <- st_read("/home/shares/wwri-wildfire/data/infrastructure/raw/fire_stations/2024/BCGW_02001F02_1748559278610_16688/GSR_FIRST_RESPONDERS_SVW/FRST_RSPND_point.shp") #  # /home/shares/wwri-wildfire/data/multi_domain_data/raw/boundary_layers/temp_bc/BCGW_02001F02_1749062540530_15428/GSR_FIRST_RESPONDERS_SVW/FRST_RSPND_point.shp
+bc_fire_stations <- st_read(file.path(wri_project_root, "data", "infrastructure", "raw", "fire_stations", "2024", "BCGW_02001F02_1748559278610_16688", "GSR_FIRST_RESPONDERS_SVW", "FRST_RSPND_point.shp"))
 
 # clean up the BC fire department df
 bc_fire_stations_clean <- bc_fire_stations %>%
@@ -197,7 +199,7 @@ plot(bc_fire_stations_sf$geometry, col = "pink", add = TRUE)
 # close enough
 
 # read in alt divisions data source
-#divs_alt_source <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/canada_census_divisions/canada-census-divisions.shp") %>%
+#divs_alt_source <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "canada_census_divisions", "canada-census-divisions.shp")) %>%
   #st_transform(., st_crs(study_area_raster_moll)) # transform to match the study area raster
 
 # join the points with the divisions polygons to see which fall in each polygon
@@ -256,7 +258,7 @@ plot(bc_fire_stations_sf_with_divs_sums)
 # SWITCH TO LUC'S DATA SOURCE
 # The processed version of YK fire stations is created in:
 # infrastructure/resistance/4-fire_resource_density/fire_station_proximity.ipynb
-yk_fire_stations <- st_read("/home/shares/wwri-wildfire/data/infrastructure/raw/fire_stations/2023/yukon-fire-resources/processed/yukon_fire_departments.shp")
+yk_fire_stations <- st_read(file.path(wri_project_root, "data", "infrastructure", "raw", "fire_stations", "2023", "yukon-fire-resources", "processed", "yukon_fire_departments.shp"))
 
 # filter to only volunteer
 yk_fire_stations_sf <- yk_fire_stations %>%
@@ -339,8 +341,8 @@ fire_stations_rast_aligned <- align_raster_to_template(study_area_raster, fire_s
 
 # write the full raster
 #merged_fire_dpt_raster <- merge(us_fire_stations_rast, bc_fire_stations_rast, yk_fire_stations_rast)
-writeRaster(fire_stations_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_resistance_vol_fire_stations.tif", overwrite = TRUE) # this is currently in 5070
+writeRaster(fire_stations_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_resistance_vol_fire_stations.tif"), overwrite = TRUE) # this is currently in 5070
 
 # merged_fire_dpt_raster_4269 <- fire_stations_rast %>%
 #   project(x = ., y = "EPSG:4269")
-# writeRaster(merged_fire_dpt_raster_4269, "/home/shares/wwri-wildfire/domains/sense-of-place/people/vol_fire_depts_4269.tif", overwrite = TRUE)
+# writeRaster(merged_fire_dpt_raster_4269, file.path(wri_project_root, "domains", "sense-of-place", "people", "vol_fire_depts_4269.tif"), overwrite = TRUE)

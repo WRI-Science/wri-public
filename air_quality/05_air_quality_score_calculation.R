@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Set Up ####
 # Read in necessary packages
 library(terra) 
@@ -5,9 +7,9 @@ library(here)
 library(dplyr)
 
 # Set base directories
-data_file_path <- "/home/shares/wwri-wildfire/data/air_quality"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers/2024/air_quality"
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
+data_file_path <- file.path(wri_project_root, "data", "air_quality")
+final_layers_file_path <- file.path(wri_project_root, "final_layers", "2024", "air_quality")
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
 
 #### Boundary layers ####
 study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif"))
@@ -83,7 +85,7 @@ writeRaster(resilience,
             overwrite = TRUE)
 
 #### Calculate Domain Score ####
-status <- rast("/home/shares/wwri-wildfire/final_layers/2024/air_quality/air_quality_status.tif")
+status <- rast(file.path(wri_project_root, "final_layers", "2024", "air_quality", "air_quality_status.tif"))
 # Domain Score is calculated as the mean of status and resilience
 domain_score <- terra::mean(c(status, 
                               resilience), 

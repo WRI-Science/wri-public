@@ -1,3 +1,7 @@
+import os
+
+WRI_PROJECT_ROOT = os.environ.get("WRI_PROJECT_ROOT", "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to download the raw scanfi data for further processing.
 # Once this has been done it does not need to be run again unless there is an update to the data.
@@ -7,7 +11,7 @@ from ftplib import FTP
 import os
 
 #### Setup and File Paths ####
-natural_habitats_base_path = "/home/shares/wwri-wildfire/data/natural_habitats/"
+natural_habitats_base_path = os.path.join(WRI_PROJECT_ROOT, "data", "natural_habitats")
 
 raw_data_save_path = natural_habitats_base_path + "raw/scanfi/"
 

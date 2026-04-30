@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 #### Goal ####
 # The goal of this script is to generate the tm_id dfs to be joined with the step 1
 # output that will be used to calculate stand density, diversity, and tree trait indicators.
@@ -10,8 +12,8 @@ library(data.table)
 library(terra)
 
 #### Setup and File Paths ####
-multi_domain_data_base_path <- "/home/shares/wwri-wildfire/data/multi_domain_data/"
-natural_habitats_base_path <- "/home/shares/wwri-wildfire/data/natural_habitats/"
+multi_domain_data_base_path <- file.path(wri_project_root, "data", "multi_domain_data")
+natural_habitats_base_path <- file.path(wri_project_root, "data", "natural_habitats")
 
 study_area_df_path <- paste0(multi_domain_data_base_path, "int/treemap/study_area_treemap_2016_all_layers.csv")
 tree_table_df_path <- paste0(multi_domain_data_base_path, "raw/treemap/from_publication_zip/Data/TreeMap2016_tree_table.csv")

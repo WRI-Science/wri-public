@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 # Load required library
 library(sf)
 library(terra)
@@ -12,11 +14,11 @@ library(purrr)
 
 #### Base directories ####
 # MAKE SURE TO CHANGE DOMAIN PATH NAME ACCORDINGLY
-multi_domain_data_file_path <- "/home/shares/wwri-wildfire/data/multi_domain_data"
-data_file_path <- "/home/shares/wwri-wildfire/data/infrastructure"
-raw_data_file_path <- "/home/shares/wwri-wildfire/data/infrastructure/raw"
-intermediate_data_file_path <- "/home/shares/wwri-wildfire/data/infrastructure/intermediate"
-final_layers_file_path <- "/home/shares/wwri-wildfire/final_layers"
+multi_domain_data_file_path <- file.path(wri_project_root, "data", "multi_domain_data")
+data_file_path <- file.path(wri_project_root, "data", "infrastructure")
+raw_data_file_path <- file.path(wri_project_root, "data", "infrastructure", "raw")
+intermediate_data_file_path <- file.path(wri_project_root, "data", "infrastructure", "intermediate")
+final_layers_file_path <- file.path(wri_project_root, "final_layers")
 
 #### Boundary layers ####
 study_area_admin1_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "boundary_layers/processed/admin-boundary-layers/wwri_study_area_admin_1.shp")) %>% 
@@ -25,7 +27,7 @@ study_area_admin2_shape_5070 <- st_read(file.path(multi_domain_data_file_path, "
   st_transform(5070)
 study_area_90m_5070 <- rast(file.path(multi_domain_data_file_path, "boundary_layers/processed/admin-boundary-layers/wwri_study_area_raster-mask-lvl-0-90m-with-na.tif"))
 
-human_settlement_layer <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/human_settlement/human_sett_aligned.tif")
+human_settlement_layer <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "human_settlement", "human_sett_aligned.tif"))
 
 #### Functions ####
 source(here("templates_and_functions", "align_raster_to_template.R"))

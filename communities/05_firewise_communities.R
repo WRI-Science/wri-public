@@ -1,3 +1,5 @@
+wri_project_root <- Sys.getenv("WRI_PROJECT_ROOT", unset = "/home/shares/wwri-wildfire")
+
 library(tidyverse)
 library(tidycensus)
 library(tidygeocoder)
@@ -7,12 +9,12 @@ library(here) # To assemble file paths within project
 # Source functions
 source(here("templates_and_functions", "align_raster_to_template.R"))
 census_api_key <- Sys.getenv('CENSUS_API_KEY') # retrieve key stored in Renv file
-study_area_lvl_2 <- st_read("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_admin_2.shp") # for the vector shapes for the data
-study_area_raster <- rast("/home/shares/wwri-wildfire/data/multi_domain_data/int/boundary_layers/admin_boundary_layers/wwri_study_area_raster_mask_lvl_0_90m_with_na.tif") # study area raster to rasterize to
+study_area_lvl_2 <- st_read(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_admin_2.shp")) # for the vector shapes for the data
+study_area_raster <- rast(file.path(wri_project_root, "data", "multi_domain_data", "int", "boundary_layers", "admin_boundary_layers", "wwri_study_area_raster_mask_lvl_0_90m_with_na.tif")) # study area raster to rasterize to
 
 # US
 # read in the data
-us_firewise <- read_csv("/home/shares/wwri-wildfire/data/communities/raw/us_firewise_communities/us_firewise_communities.csv", col_names = "community_name")
+us_firewise <- read_csv(file.path(wri_project_root, "data", "communities", "raw", "us_firewise_communities", "us_firewise_communities.csv"), col_names = "community_name")
 
 # filter by states of interest and add state name info
 state_names <- c("New Mexico", "Arizona", "California", "Nevada", "Utah", "Colorado", "Montana", "Idaho", "Wyoming", "Washington", "Oregon", "Alaska")
@@ -160,11 +162,11 @@ plot(us_firewise_comms_rast)
 us_firewise_comms_rast_aligned <- align_raster_to_template(study_area_raster, us_firewise_comms_rast, input_type = "categorical")
 
 # write out the full raster
-writeRaster(us_firewise_comms_rast, "/home/shares/wwri-wildfire/final_layers/2024/communities/indicators/communities_resistance_firewise_comms.tif", overwrite = TRUE) # this is currently in 5070
+writeRaster(us_firewise_comms_rast, file.path(wri_project_root, "final_layers", "2024", "communities", "indicators", "communities_resistance_firewise_comms.tif"), overwrite = TRUE) # this is currently in 5070
 
 # us_firewise_comms_rast_4269 <- us_firewise_comms_rast %>%
 #   project(x = ., y = "EPSG:4269")
-# writeRaster(us_firewise_comms_rast_4269, "/home/shares/wwri-wildfire/domains/sense-of-place/people/firewise_comms_4269.tif", overwrite = TRUE)
+# writeRaster(us_firewise_comms_rast_4269, file.path(wri_project_root, "domains", "sense-of-place", "people", "firewise_comms_4269.tif"), overwrite = TRUE)
 
 # Canada
 # as of right now, we don't have access to a Canada equivalent. FireSmart Canada may be similar enough but the list of neighbourhoods is not available on the website and we were told via email that we would not be able to get access.
