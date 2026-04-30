@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+title: "Wildfire Resilience Index (WRI) — 2024 Snapshot"
+message: "If you use this software, please cite it using the metadata below."
+authors:
+  - family-names: Broderick
+    given-names: Carlo
+    affiliation: "National Center for Ecological Analysis and Synthesis (NCEAS), UC Santa Barbara"
+  - family-names: DeCesaro
+    given-names: Joe
+    affiliation: "National Center for Ecological Analysis and Synthesis (NCEAS), UC Santa Barbara"
+  - family-names: Egg
+    given-names: Erika
+    affiliation: "National Center for Ecological Analysis and Synthesis (NCEAS), UC Santa Barbara"
+  - family-names: Farnisa
+    given-names: Mona
+    affiliation: "National Center for Ecological Analysis and Synthesis (NCEAS), UC Santa Barbara"
+  - family-names: Fong
+    given-names: Caitlin
+    affiliation: "National Center for Ecological Analysis and Synthesis (NCEAS), UC Santa Barbara"
+  - family-names: Halpern
+    given-names: Ben
+    affiliation: "National Center for Ecological Analysis and Synthesis (NCEAS), UC Santa Barbara"
+repository-code: "https://github.com/WRI-Science/wri-public"
+url: "https://wildfireindex.org"
+abstract: >
+  Code used to generate the 2024 snapshot of the Western Wildfire Resilience Index (WRI),
+  measuring wildfire resilience across communities in the western United States and Canada.
+keywords:
+  - wildfire
+  - resilience
+  - index
+  - western North America

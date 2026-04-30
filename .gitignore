@@ -1,0 +1,32 @@
+# R
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Data files (large)
+*.tif
+*.geotiff
+*.gpkg
+*.shp
+*.dbf
+*.shx
+*.prj
+*.fgb
+*.parquet
+*.csv
+*.rds
+*.RDS
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
