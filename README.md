@@ -94,8 +94,18 @@ The final score is the mean of the drought plan and water treatment indicators.
 
 ## Shared utilities
 
-- **`templates_and_functions/`** — Shared R utilities used across all domains: `wri_paths.R` (project root via `WRI_PROJECT_ROOT`), `align_raster_to_template.R` (reprojects/resamples any raster to the 90 m study area grid), `score_calculation_template.R` (standard formulas for status, resistance, recovery, resilience, and domain scores), and `base_script_template.R` (blank starting template for new indicator scripts).
+- **`templates_and_functions/`** — Shared R utilities used across all domains: `wri_paths.R` (project root via `WRI_PROJECT_ROOT`), `align_raster_to_template.R` (reprojects/resamples any raster to the 90 m study area grid), `score_calculation_template.R` (standard formulas for status, resistance, recovery, resilience, and domain scores), `base_script_template.R` (blank starting template for new indicator scripts), and `composite_wri_score_stub.R` (documents how the **full WRI composite** is assembled from domain outputs — see below).
 - **`traits/`** — Compiles and gap-fills fire-relevant biological trait data (bark thickness, serotiny, resprouting, seed dispersal, shade tolerance) for trees and vertebrates. Sources include TRY, BIEN, BBBdb, AmphiBIO, and FishBase. Outputs feed into both the Natural Habitats and Species domain pipelines.
+
+---
+
+## Full WRI composite score
+
+This repository publishes **per-domain** processing scripts. The headline Wildfire Resilience Index layer combines those domains as an **unweighted arithmetic mean** of the eight domain score rasters (each already aligned to the shared 90 m grid).
+
+**Sense of Place** is represented by two sub-pipelines (*iconic places* and *iconic species*). In the composite, those two sub-domain score rasters are averaged first, then that result enters the eight-way mean with the other domains.
+
+[`templates_and_functions/composite_wri_score_stub.R`](templates_and_functions/composite_wri_score_stub.R) lists the default output filenames and exposes `write_wri_composite()` once all domain rasters exist under `{WRI_PROJECT_ROOT}/final_layers/<year>/`.
 
 ---
 
@@ -113,7 +123,9 @@ Scripts are a mix of R and Python. Processing data at 90m resolution across 12 w
 
 ## Data
 
-The input data for this analysis exceeds 10 terabytes and will be made available upon request or once the article has been accepted for publication. Final output layers (Cloud-Optimized GeoTIFFs) are available on [KNB](https://knb.ecoinformatics.org/data/wri-data-processing/cogs/) and [Source Cooperative](https://source.coop).
+The input data for this analysis exceeds 10 terabytes and will be made available upon request or once the article has been accepted for publication.
+
+Planned public archives for Cloud-Optimized GeoTIFFs — **[KNB](https://knb.ecoinformatics.org/data/wri-data-processing/cogs/)** and **[Source Cooperative](https://source.coop)** — are **not yet guaranteed to resolve** until those deposits are finalized alongside publication. Treat those URLs as placeholders until the landing pages go live; contact the authors if you need access sooner.
 
 ---
 
@@ -134,9 +146,23 @@ Some notebooks use older folder spellings under `data/` (for example `multi-doma
 
 ---
 
+## Dependencies and reproducibility
+
+- **Python (notebooks + `natural_habitats` raster helpers):** install from [`requirements.txt`](requirements.txt) (`pip install -r requirements.txt`). OSMnx / NetworkX versions strongly affect road-network downloads; pin upgrades cautiously.
+- **R:** [`renv.lock`](renv.lock) records CRAN package versions and hashes used to describe this codebase (generated from script scans + transitive dependencies). Restore with `install.packages("renv"); renv::restore()` from the repository root. Some installs build from source and require standard GNU toolchain packages (`build-essential`, `libgdal-dev`, `libproj-dev`, `libgeos-dev`, `libudunits2-dev`, etc., on Debian/Ubuntu).
+- **Regenerating the lockfile:** maintainers can rerun [`scripts/write_renv_lock.R`](scripts/write_renv_lock.R) with `TMPDIR` on a filesystem that allows executing configure scripts (some HPC `/tmp` mounts are `noexec`).
+
+---
+
 ## Citation
 
 If you use this work, please cite this project — either by linking back to this repository or by acknowledging the Wildfire Resilience Index in your references. Structured citation metadata for GitHub’s “Cite this repository” button is in [`CITATION.cff`](CITATION.cff).
+
+---
+
+## License
+
+Licensed under the **Apache License 2.0**; see [`LICENSE`](LICENSE). Attribution and copyright notices are summarized in [`NOTICE`](NOTICE).
 
 ---
 

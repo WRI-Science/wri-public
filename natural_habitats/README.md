@@ -123,7 +123,7 @@ Measures inter-annual NDVI variability (rolling standard deviation) as a proxy f
 ---
 
 ## QA / Validation
-- **`natural_habitats_background_classify.R`** (in parent `domains/` repo — not copied here) — NA classification.
+- **`natural_habitats_background_classify.R`** — NA classification helper used in QA workflows; it lives only in the internal monorepo (`domains/`) and is **not** vendored here so this public tree stays smaller. If you need equivalent QA locally, mirror that script from your internal checkout or adapt `natural_habitats_checks.R`.
 - **`natural_habitats_checks.R`** — Final layer validation.
 
 ---

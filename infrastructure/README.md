@@ -51,7 +51,7 @@ Measures the ratio of vegetation to impervious/built surface within a 10 m buffe
 | `01_download_building_polygon_tiles.ipynb` | Downloads Microsoft building footprint polygon tiles for the study area |
 | `02_download-esri-landcover.ipynb` | Downloads ESRI 10 m land cover tiles to classify vegetation vs. built surface |
 | `03_create_defensible_space_polygons.ipynb` | Buffers building footprints and intersects with land cover |
-| `04_calculate_difensible_space.ipynb` | Calculates vegetation percentage within the 10 m buffer per building |
+| `04_calculate_defensible_space.ipynb` | Calculates vegetation percentage within the 10 m buffer per building |
 | `05_calculate_percent_trees_and_rescale.R` | Computes final percent-tree defensible space indicator and rescales to 0–1 |
 
 ### Fire resource density — `resistance/fire_resource_density/`

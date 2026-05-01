@@ -31,6 +31,9 @@ A template for the final score calculation step in each domain. Provides the sta
 
 All domain score calculation scripts derive from this template.
 
+### `composite_wri_score_stub.R`
+Documents assembly of the **full WRI composite** after all eight domain score GeoTIFFs exist: arithmetic mean of domain layers, with Sense of Place formed as the mean of iconic places + iconic species scores first. Call `write_wri_composite(write_output = TRUE)` once paths match your `final_layers/` layout.
+
 ---
 
 ## Notes

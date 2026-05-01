@@ -4,19 +4,29 @@ BUILT ENVIRONMENT STATUS COMPONENT
 
 Overview:
 ---------
-The Built Environment status component determines the presence or absence of buildings in a given area. This assessment is made using building polygon data sourced from Microsoft.
+The Built Environment status component determines the presence or absence of
+buildings in a given area using Microsoft building polygons.
+
+There are **no standalone scripts in infrastructure/status/**: building
+footprints are downloaded and processed in the **defensible space** resistance
+pipeline (infrastructure/resistance/defensible_space/). Outputs from that
+workflow feed infrastructure status and resistance indicators elsewhere in
+this domain.
 
 Data Source:
 -------------
-Building polygon data is provided by Microsoft's Global ML Building Footprints repository. You can access the repository at:
+Building polygon data is provided by Microsoft's Global ML Building Footprints repository:
 https://github.com/microsoft/GlobalMLBuildingFootprints
 
 Data Integration:
 ------------------
-The building polygons are downloaded and incorporated into the defensible space data layer located within the resistance folder. This integration allows for a comprehensive analysis of the built environment.
+Building polygons are incorporated into the defensible-space workflow in the
+resistance folder so vegetation-within-buffer metrics align with structure
+locations.
 
 Usage:
 -------
-Utilize this component to evaluate areas based on the available building data. The presence of buildings in a specified area defines the status output for the built environment.
+Use this component conceptually to evaluate areas based on building presence;
+operational code paths live under defensible_space/.
 
 =========================================

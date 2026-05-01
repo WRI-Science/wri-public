@@ -62,4 +62,6 @@ Defines reusable functions used across the pipeline:
 ---
 
 ## Output
-Final raster layers are written under **`{WRI_PROJECT_ROOT}/final_layers/<year>/biodiversity/`** on the filesystem used for the 2024 snapshot (the Species domain code lives in this repo under `species/`). Some scripts still reference the `data/biodiversity` folder name for inputs. Configure **`WRI_PROJECT_ROOT`** as described in the repository root [README](../README.md).
+Final raster layers are written under **`{WRI_PROJECT_ROOT}/final_layers/<year>/biodiversity/`**. That folder name is intentional: it matches the legacy internal layout on disk even though this public repo uses the **`species/`** directory for code and docs. Do **not** use a `species/` subdirectory under `final_layers/` unless you have reorganized storage yourself.
+
+Configure **`WRI_PROJECT_ROOT`** as described in the repository root [README](../README.md).

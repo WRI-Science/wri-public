@@ -1,5 +1,7 @@
 cff-version: 1.2.0
 title: "Wildfire Resilience Index (WRI) — 2024 Snapshot"
+version: "1.0.0"
+date-released: "2026-04-30"
 message: "If you use this software, please cite it using the metadata below."
 authors:
   - family-names: Broderick

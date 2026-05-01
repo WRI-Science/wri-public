@@ -1,6 +1,8 @@
 # R
 .Rhistory
 .RData
+# renv creates this when restoring deps locally; `renv.lock` stays tracked
+renv/
 .Rproj.user/
 *.Rproj
 .Renviron
